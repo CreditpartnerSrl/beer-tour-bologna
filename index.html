@@ -1621,9 +1621,84 @@
                 gap: 8px;
             }
         }
+
+        /* Sync Overlay - Blocco UI durante sincronizzazione */
+        .sync-overlay {
+            display: none; /* Nascosto di default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(44, 44, 44, 0.95);
+            z-index: 99999; /* Sopra tutto */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            touch-action: none; /* Blocca tutti i touch */
+            pointer-events: all; /* Cattura tutti gli eventi */
+        }
+
+        .sync-overlay.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Spinner animato */
+        .sync-spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(253, 185, 39, 0.2);
+            border-top: 8px solid #FDB927;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(253, 185, 39, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Testo sincronizzazione */
+        .sync-text {
+            color: #FDB927;
+            font-size: 24px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(253, 185, 39, 0.5);
+        }
+
+        .sync-subtext {
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* Animazione pulsante */
+        .sync-pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
     </style>
 </head>
 <body>
+    <!-- Sync Overlay - Blocco UI durante sincronizzazione -->
+    <div id="syncOverlay" class="sync-overlay">
+        <div class="sync-spinner"></div>
+        <div class="sync-text">🔄 Sincronizzazione in corso...</div>
+        <div class="sync-subtext">Attendere prego, non chiudere l'app</div>
+    </div>
+
     <!-- Welcome Screen -->
     <div id="welcomeScreen" class="welcome-screen">
         <div class="welcome-content">
@@ -2274,23 +2349,32 @@
                 tabElement.classList.add('active');
             }
             if (element) element.classList.add('active');
+
+            // IMPORTANTE: Quando si torna alla tab Home, ri-calcola il thermometro
+            // Questo è necessario perché le dimensioni del container erano 0 quando nascosto
+            if (tabName === 'home') {
+                // Usa setTimeout per dare al browser tempo di renderizzare la tab
+                setTimeout(() => {
+                    updateThermometer();
+                }, 50);
+            }
         }
 
         function quickNav(tabName, element) {
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
+
             const tabElement = document.getElementById(`${tabName}-tab`);
             if (tabElement) {
                 tabElement.classList.add('active');
             }
-            
+
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             if (element) element.classList.add('active');
-            
+
             // Update top tabs to match
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -2299,6 +2383,15 @@
                     btn.classList.add('active');
                 }
             });
+
+            // IMPORTANTE: Quando si torna alla tab Home, ri-calcola il thermometro
+            // Questo è necessario perché le dimensioni del container erano 0 quando nascosto
+            if (tabName === 'home') {
+                // Usa setTimeout per dare al browser tempo di renderizzare la tab
+                setTimeout(() => {
+                    updateThermometer();
+                }, 50);
+            }
         }
 
         // Beer Functions
@@ -2424,45 +2517,70 @@
             const maxBAC = 6.0;
             const percentage = Math.min(100, (bac / maxBAC) * 100);
 
+            console.log(`🔄 UpdateThermometer: BAC=${bac.toFixed(2)}‰, percentage=${percentage.toFixed(1)}%`);
+
             // Update BEER LIQUID width (fills from left to right)
             const liquidElement = document.getElementById('beerLiquid');
             if (liquidElement) {
-                liquidElement.style.width = `${percentage}%`;
+                // IMPORTANTE: Usa requestAnimationFrame per forzare il re-render
+                // anche quando l'elemento è nascosto (in una tab non attiva)
+                requestAnimationFrame(() => {
+                    // Force reflow to ensure DOM is ready
+                    void liquidElement.offsetWidth;
+                    liquidElement.style.width = `${percentage}%`;
+                    console.log(`✅ Liquid updated to ${percentage}%`);
+                });
+            } else {
+                console.error('❌ beerLiquid element not found!');
             }
 
             // Update pointer position (follows the beer level at right edge)
             const pointerElement = document.getElementById('thermometerPointer');
             if (pointerElement) {
                 if (percentage > 0) {
-                    // Show pointer and position it at the end of the beer liquid
-                    pointerElement.classList.add('visible');
-                    const containerWidth = document.querySelector('.thermometer-track').offsetWidth || 316;
-                    const containerHeight = document.querySelector('.thermometer-track').offsetHeight || 48;
-                    const availableWidth = containerWidth - 6;
-                    const pointerPos = 3 + Math.min((percentage / 100) * availableWidth, availableWidth - 2);
-                    pointerElement.style.left = `${Math.max(3, pointerPos)}px`;
+                    // IMPORTANTE: Usa requestAnimationFrame per sincronizzare con il liquid update
+                    requestAnimationFrame(() => {
+                        // Show pointer and position it at the end of the beer liquid
+                        pointerElement.classList.add('visible');
 
-                    // Calculate pointer height based on position to follow border-radius perimeter
-                    // The border-radius is 48px, so at the edges the thermometer is narrower
-                    const borderRadius = 48;
-                    const normalizedPos = pointerPos / containerWidth; // 0 to 1
+                        // Force reflow before reading dimensions
+                        const trackElement = document.querySelector('.thermometer-track');
+                        if (trackElement) {
+                            void trackElement.offsetWidth; // Force reflow
+                        }
 
-                    // Distance from center (0 at center, 1 at edges)
-                    const distanceFromCenter = Math.abs(normalizedPos - 0.5) * 2;
+                        // Usa fallback anche quando offsetWidth è 0 (elemento nascosto)
+                        const containerWidth = (trackElement?.offsetWidth && trackElement.offsetWidth > 0) ? trackElement.offsetWidth : 316;
+                        const containerHeight = (trackElement?.offsetHeight && trackElement.offsetHeight > 0) ? trackElement.offsetHeight : 48;
+                        const availableWidth = containerWidth - 6;
+                        const pointerPos = 3 + Math.min((percentage / 100) * availableWidth, availableWidth - 2);
+                        pointerElement.style.left = `${Math.max(3, pointerPos)}px`;
 
-                    // Calculate height reduction based on circular arc
-                    // Using quadratic curve to approximate the border-radius shape
-                    const heightReduction = Math.pow(distanceFromCenter, 2) * (borderRadius / containerHeight);
-                    const pointerHeight = Math.max(
-                        containerHeight * (1 - heightReduction) - 6,
-                        containerHeight * 0.3  // Minimum 30% height at edges
-                    );
+                        // Calculate pointer height based on position to follow border-radius perimeter
+                        // The border-radius is 48px, so at the edges the thermometer is narrower
+                        const borderRadius = 48;
+                        const normalizedPos = pointerPos / containerWidth; // 0 to 1
 
-                    pointerElement.style.height = `${pointerHeight}px`;
+                        // Distance from center (0 at center, 1 at edges)
+                        const distanceFromCenter = Math.abs(normalizedPos - 0.5) * 2;
+
+                        // Calculate height reduction based on circular arc
+                        // Using quadratic curve to approximate the border-radius shape
+                        const heightReduction = Math.pow(distanceFromCenter, 2) * (borderRadius / containerHeight);
+                        const pointerHeight = Math.max(
+                            containerHeight * (1 - heightReduction) - 6,
+                            containerHeight * 0.3  // Minimum 30% height at edges
+                        );
+
+                        pointerElement.style.height = `${pointerHeight}px`;
+                        console.log(`✅ Pointer updated: left=${pointerPos.toFixed(1)}px, height=${pointerHeight.toFixed(1)}px`);
+                    });
                 } else {
                     // Hide pointer when no beer
                     pointerElement.classList.remove('visible');
                 }
+            } else {
+                console.error('❌ thermometerPointer element not found!');
             }
 
             // Update face icon based on BAC with MORE gradations
@@ -3066,7 +3184,6 @@
         // Dopo aver deployato lo script, incolla l'URL qui:
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw93CHhCGB2PCtW4RVE6czi3lzr9fO0csM8UfJc_wJQwZAFI3k895Ci-_ABkEjGtvbQaA/exec";
 
-        let syncInterval = null;
         let sharedPhotos = []; // Foto condivise da tutti gli utenti
         let leaderboardData = []; // Dati classifica
 
@@ -3077,7 +3194,11 @@
                 return;
             }
 
-            showNotification('🔄 Sincronizzazione in corso...');
+            // Mostra overlay e blocca UI
+            const overlay = document.getElementById('syncOverlay');
+            if (overlay) {
+                overlay.classList.add('active');
+            }
 
             try {
                 // Upload user data
@@ -3089,9 +3210,17 @@
                 // Download shared photos
                 await downloadSharedPhotos();
 
+                // Nascondi overlay e mostra notifica successo
+                if (overlay) {
+                    overlay.classList.remove('active');
+                }
                 showNotification('✅ Sincronizzato con successo!');
             } catch (error) {
                 console.error('Sync error:', error);
+                // Nascondi overlay anche in caso di errore
+                if (overlay) {
+                    overlay.classList.remove('active');
+                }
                 showNotification('❌ Errore sincronizzazione');
             }
         }
@@ -3301,44 +3430,7 @@
             event.target.value = '';
         };
 
-        // Auto-sync every 30 seconds
-        function startAutoSync() {
-            if (GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_SCRIPT_URL_HERE" || !GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.trim() === "") {
-                console.log('Google Script URL not configured. Auto-sync disabled.');
-                return;
-            }
 
-            // Clear existing interval
-            if (syncInterval) {
-                clearInterval(syncInterval);
-            }
-
-            // Auto-sync: SOLO UPLOAD (no download per evitare sovrascrittura dati locali)
-            syncInterval = setInterval(async () => {
-                try {
-                    // IMPORTANTE: Solo upload automatico, NO download!
-                    // Il download avviene solo quando l'utente clicca manualmente "Sync"
-                    await uploadUserData();
-                    console.log('🔄 Auto-upload completato (background)');
-                } catch (error) {
-                    console.error('Auto-sync error:', error);
-                }
-            }, 30000); // 30 seconds
-
-            // Initial sync completo (con download)
-            syncWithSheet();
-        }
-
-        // Start auto-sync when app loads (add to window.onload)
-        const originalOnload = window.onload;
-        window.onload = function() {
-            if (originalOnload) originalOnload();
-
-            // Start auto-sync after 5 seconds
-            setTimeout(() => {
-                startAutoSync();
-            }, 5000);
-        };
 
     </script>
 </body>
