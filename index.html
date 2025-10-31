@@ -1098,22 +1098,115 @@
 
         .alcohol-input {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+            background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
+            padding: 18px;
+            border-radius: 15px;
+            border: 2px solid #2C2C2C;
+            box-shadow: 0 4px 12px rgba(253, 185, 39, 0.15);
         }
 
         .alcohol-input label {
-            flex: 1;
-            color: #666;
+            color: #2C2C2C;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .alcohol-input input {
-            width: 80px;
-            padding: 8px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+        .alcohol-value-display {
+            font-size: 24px;
+            color: #FDB927;
+            font-weight: 900;
+            background: #2C2C2C;
+            padding: 8px 16px;
+            border-radius: 12px;
+            min-width: 85px;
             text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .alcohol-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 12px;
+            border-radius: 10px;
+            background: linear-gradient(to right,
+                #4CAF50 0%,
+                #CDDC39 15%,
+                #FDB927 30%,
+                #FF9800 50%,
+                #FF5722 75%,
+                #F44336 100%);
+            outline: none;
+            border: 2px solid #2C2C2C;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .alcohol-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #FFFFFF, #F0F0F0);
+            cursor: pointer;
+            border: 3px solid #2C2C2C;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+
+        .alcohol-slider::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+            box-shadow: 0 6px 16px rgba(253, 185, 39, 0.5);
+        }
+
+        .alcohol-slider::-moz-range-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #FFFFFF, #F0F0F0);
+            cursor: pointer;
+            border: 3px solid #2C2C2C;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+        }
+
+        .alcohol-slider::-moz-range-thumb:active {
+            transform: scale(1.2);
+            box-shadow: 0 6px 16px rgba(253, 185, 39, 0.5);
+        }
+
+        .alcohol-presets {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+
+        .preset-btn {
+            flex: 1;
+            padding: 8px 6px;
+            background: white;
+            border: 2px solid #2C2C2C;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .preset-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #FDB927, #F4A300);
+            color: #2C2C2C;
         }
 
         .add-beer-btn {
@@ -1712,8 +1805,20 @@
                     </div>
                 </div>
                 <div class="alcohol-input">
-                    <label for="alcoholPercentage">Gradazione Alcolica:</label>
-                    <input type="number" id="alcoholPercentage" value="5.0" min="0" max="15" step="0.1"> %
+                    <label for="alcoholSlider">
+                        <span>Gradazione Alcolica</span>
+                        <span class="alcohol-value-display" id="alcoholValue">5.0%</span>
+                    </label>
+                    <input type="range" id="alcoholSlider" class="alcohol-slider"
+                           value="5.0" min="0" max="20" step="0.5"
+                           oninput="updateAlcoholValue(this.value)">
+                    <div class="alcohol-presets">
+                        <button class="preset-btn" onclick="setAlcohol(3.5)">Leggera<br>3.5%</button>
+                        <button class="preset-btn" onclick="setAlcohol(5.0)">Media<br>5.0%</button>
+                        <button class="preset-btn" onclick="setAlcohol(7.0)">Forte<br>7.0%</button>
+                        <button class="preset-btn" onclick="setAlcohol(10.0)">Doppio<br>10.0%</button>
+                        <button class="preset-btn" onclick="setAlcohol(12.0)">Triplo<br>12.0%</button>
+                    </div>
                 </div>
 
                 <label style="display: block; margin-bottom: 8px; color: #666; font-weight: 600;">Varietà Birra:</label>
@@ -2214,8 +2319,25 @@
             appState.selectedType = type;
         }
 
+        // Update alcohol value display
+        function updateAlcoholValue(value) {
+            const display = document.getElementById('alcoholValue');
+            if (display) {
+                display.textContent = `${parseFloat(value).toFixed(1)}%`;
+            }
+        }
+
+        // Set alcohol preset
+        function setAlcohol(value) {
+            const slider = document.getElementById('alcoholSlider');
+            if (slider) {
+                slider.value = value;
+                updateAlcoholValue(value);
+            }
+        }
+
         function addBeer() {
-            const alcohol = parseFloat(document.getElementById('alcoholPercentage').value) || 5.0;
+            const alcohol = parseFloat(document.getElementById('alcoholSlider').value) || 5.0;
             const location = locations[appState.currentLocation].name;
 
             const beer = {
@@ -3191,19 +3313,19 @@
                 clearInterval(syncInterval);
             }
 
-            // Sync every 30 seconds
+            // Auto-sync: SOLO UPLOAD (no download per evitare sovrascrittura dati locali)
             syncInterval = setInterval(async () => {
                 try {
+                    // IMPORTANTE: Solo upload automatico, NO download!
+                    // Il download avviene solo quando l'utente clicca manualmente "Sync"
                     await uploadUserData();
-                    await downloadLeaderboard();
-                    await downloadSharedPhotos();
-                    console.log('Auto-sync completed');
+                    console.log('🔄 Auto-upload completato (background)');
                 } catch (error) {
                     console.error('Auto-sync error:', error);
                 }
             }, 30000); // 30 seconds
 
-            // Initial sync
+            // Initial sync completo (con download)
             syncWithSheet();
         }
 
