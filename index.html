@@ -1,0 +1,3199 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beer Tour Bologna - Marco's 30th Birthday</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 50%, #D4880F 100%);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 200, 0, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 60px rgba(0,0,0,0.3);
+            z-index: 1;
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 50%, #D4880F 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            color: #2C2C2C;
+            padding: 20px;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(212, 136, 15, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .welcome-screen.hidden {
+            display: none;
+        }
+
+        .welcome-content {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .profile-setup {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .profile-input {
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .profile-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .profile-input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .profile-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-row .profile-input {
+            flex: 1;
+        }
+
+        .profile-select {
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .profile-select option {
+            background: #667eea;
+            color: white;
+        }
+
+        .profile-avatars {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .avatar-option {
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .avatar-option:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .avatar-option.selected {
+            border-color: white;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .start-button {
+            padding: 15px;
+            background: white;
+            color: #667eea;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .start-button:active {
+            transform: scale(0.98);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
+            color: #2C2C2C;
+            padding: 18px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(253, 185, 39, 0.3);
+            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            flex: 1;
+            text-align: left;
+        }
+
+        .header-center {
+            flex: 2;
+            text-align: center;
+        }
+
+        .header-right {
+            flex: 1;
+            text-align: right;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .user-avatar {
+            font-size: 20px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .header .subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .share-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+
+        .share-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .tab-nav {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid #f0f0f0;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            z-index: 999;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn {
+            position: relative;
+            flex: 1;
+            padding: 12px 8px;
+            border: none;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #666;
+            min-width: 0;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
+            color: #2C2C2C;
+            font-weight: 900;
+            box-shadow: 0 2px 10px rgba(253, 185, 39, 0.3);
+        }
+
+        .tab-btn .icon {
+            font-size: 26px;
+        }
+
+        .tab-btn span:last-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Notification Badge for Challenges */
+        .notification-badge {
+            position: absolute;
+            top: 3px;
+            right: 5px;
+            background: #FF0000;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 900;
+            box-shadow: 0 2px 8px rgba(255, 0, 0, 0.5);
+            animation: badgePulse 2s ease-in-out infinite;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* TROPHY ICON RED - New challenges notification */
+        /* Aumentiamo la specificità per override forzato */
+        .tab-btn .icon i.trophy-has-new-challenges,
+        .tab-btn.active .icon i.trophy-has-new-challenges,
+        i.fas.fa-trophy.trophy-has-new-challenges {
+            color: #FF0000 !important;
+            animation: trophyPulse 2s ease-in-out infinite !important;
+            filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 0, 0, 0.8)) !important;
+        }
+
+        @keyframes trophyPulse {
+            0%, 100% {
+                transform: scale(1);
+                filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 0, 0, 0.8));
+            }
+            50% {
+                transform: scale(1.15);
+                filter: brightness(1.5) drop-shadow(0 0 12px rgba(255, 0, 0, 1));
+            }
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* BEER LIQUID THERMOMETER - Professional Design */
+        .thermometer-container {
+            background: linear-gradient(145deg, #FFFFFF 0%, #FFF9E6 100%);
+            padding: 30px 20px;
+            border-radius: 25px;
+            box-shadow:
+                0 20px 50px rgba(253, 185, 39, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #2C2C2C;
+        }
+
+        .thermometer-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(253, 185, 39, 0.08) 0%, transparent 70%);
+            animation: shimmer 10s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+            50% { transform: translate(-40px, -40px); opacity: 0.8; }
+        }
+
+        .thermometer-visual {
+            position: relative;
+            width: 100%;
+            max-width: 340px;
+            height: 120px;
+            margin: 20px auto 100px auto;
+            background: #F5F5F5;
+            border-radius: 60px;
+            box-shadow:
+                inset 0 6px 20px rgba(0,0,0,0.15),
+                0 6px 25px rgba(0,0,0,0.1);
+            padding: 12px;
+            z-index: 1;
+            border: 4px solid #2C2C2C;
+        }
+
+        .thermometer-track {
+            width: 100%;
+            height: 100%;
+            border-radius: 48px;
+            position: relative;
+            overflow: hidden;
+            background: #FAFAFA;
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        /* BEER LIQUID FILL - HORIZONTAL (Left to Right) */
+        .beer-liquid {
+            position: absolute;
+            top: 3px;
+            bottom: 3px;
+            left: 3px;
+            width: 0%;
+            max-width: calc(100% - 6px);
+            background: linear-gradient(to right,
+                #C77A0A 0%,
+                #D4880F 3%,
+                #F4A300 10%,
+                #FDB927 20%,
+                #FFC850 45%,
+                #FFD670 75%,
+                #FFE490 92%,
+                #FFF2B0 100%);
+            border-radius: 45px 0 0 45px;
+            transition: width 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow: hidden;
+            box-shadow: inset -2px 0 8px rgba(0,0,0,0.1);
+        }
+
+        /* When at 100%, use full border-radius and adjust right position */
+        .beer-liquid[style*="width: 100"] {
+            border-radius: 45px;
+            right: 3px;
+            width: calc(100% - 6px) !important;
+        }
+
+        /* Beer Foam Effect at the END (Right Side) - Beautiful Closure */
+        .beer-liquid::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 2px;
+            transform: translateY(-50%);
+            width: 35px;
+            height: 105%;
+            background: radial-gradient(ellipse at center,
+                rgba(255, 255, 255, 0.98) 0%,
+                rgba(255, 255, 255, 0.92) 20%,
+                rgba(255, 255, 255, 0.8) 40%,
+                rgba(255, 255, 255, 0.5) 65%,
+                rgba(255, 235, 176, 0.3) 80%,
+                transparent 100%);
+            border-radius: 50%;
+            filter: blur(4px);
+            animation: foamBubble 2.5s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes foamBubble {
+            0%, 100% {
+                transform: translateY(-50%) scaleX(1) scaleY(1);
+                opacity: 0.95;
+                filter: blur(4px);
+            }
+            50% {
+                transform: translateY(-50%) scaleX(1.15) scaleY(0.92);
+                opacity: 1;
+                filter: blur(3px);
+            }
+        }
+
+        /* Dynamic Bubbles - Moving & Rising Animation */
+        .beer-liquid::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 12% 65%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 1%, transparent 3%),
+                radial-gradient(circle at 28% 45%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.25) 1.2%, transparent 3.5%),
+                radial-gradient(circle at 45% 75%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 1%, transparent 2.8%),
+                radial-gradient(circle at 58% 35%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 1.5%, transparent 4%),
+                radial-gradient(circle at 72% 60%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.25) 1.2%, transparent 3.2%),
+                radial-gradient(circle at 85% 50%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 1%, transparent 3%),
+                radial-gradient(circle at 20% 85%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.15) 1%, transparent 2.5%),
+                radial-gradient(circle at 38% 25%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 1.2%, transparent 3.5%),
+                radial-gradient(circle at 63% 80%, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.25) 1%, transparent 3%),
+                radial-gradient(circle at 78% 40%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 1%, transparent 2.8%),
+                radial-gradient(circle at 92% 70%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.15) 1.2%, transparent 3.2%);
+            background-size: 100% 100%;
+            animation: bubblesRise 4s ease-in-out infinite;
+            border-radius: 48px;
+            z-index: 1;
+        }
+
+        @keyframes bubblesRise {
+            0% {
+                opacity: 0.6;
+                transform: translateY(0) translateX(0);
+                background-position: 0% 0%, 5% 10%, 10% 5%, 15% 15%, 20% 8%, 25% 12%, 30% 6%, 35% 14%, 40% 10%, 45% 8%, 50% 12%;
+            }
+            25% {
+                opacity: 0.8;
+                transform: translateY(-3px) translateX(2px);
+                background-position: 2% -8%, 7% 2%, 12% -5%, 17% 5%, 22% -3%, 27% 4%, 32% -6%, 37% 6%, 42% 2%, 47% -4%, 52% 4%;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-6px) translateX(-2px);
+                background-position: 3% -15%, 8% -5%, 13% -12%, 18% -3%, 23% -8%, 28% -2%, 33% -14%, 38% -4%, 43% -6%, 48% -10%, 53% -2%;
+            }
+            75% {
+                opacity: 0.8;
+                transform: translateY(-3px) translateX(1px);
+                background-position: 2% -8%, 7% 2%, 12% -5%, 17% 5%, 22% -3%, 27% 4%, 32% -6%, 37% 6%, 42% 2%, 47% -4%, 52% 4%;
+            }
+            100% {
+                opacity: 0.6;
+                transform: translateY(0) translateX(0);
+                background-position: 0% 0%, 5% 10%, 10% 5%, 15% 15%, 20% 8%, 25% 12%, 30% 6%, 35% 14%, 40% 10%, 45% 8%, 50% 12%;
+            }
+        }
+
+        /* Glossy Effect */
+        .thermometer-track::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 100%);
+            border-radius: 48px 48px 0 0;
+            pointer-events: none;
+        }
+
+        /* RED LINE Indicator - Follows Beer Level and Border Perimeter */
+        .thermometer-pointer {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                #FF0000 0%,
+                #DC143C 50%,
+                #FF0000 100%);
+            transition: left 1.5s cubic-bezier(0.34, 1.56, 0.64, 1), height 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 30;
+            box-shadow:
+                0 0 8px rgba(255, 0, 0, 0.6),
+                0 0 15px rgba(255, 0, 0, 0.4),
+                inset 0 0 2px rgba(255, 255, 255, 0.5);
+            animation: indicatorPulse 2s ease-in-out infinite;
+            display: none;
+        }
+
+        /* Show pointer only when there's beer */
+        .thermometer-pointer.visible {
+            display: block;
+        }
+
+        @keyframes indicatorPulse {
+            0%, 100% {
+                box-shadow:
+                    0 0 8px rgba(255, 0, 0, 0.6),
+                    0 0 15px rgba(255, 0, 0, 0.4),
+                    inset 0 0 2px rgba(255, 255, 255, 0.5);
+            }
+            50% {
+                box-shadow:
+                    0 0 12px rgba(255, 0, 0, 0.8),
+                    0 0 20px rgba(255, 0, 0, 0.6),
+                    inset 0 0 3px rgba(255, 255, 255, 0.7);
+            }
+        }
+
+        /* Face Icon Container - Centered & Balanced */
+        .thermometer-face {
+            position: absolute;
+            top: 135px;
+            font-size: 48px;
+            transition: all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+            text-align: center;
+        }
+
+        .thermometer-face i {
+            color: #FDB927;
+            animation: faceFloat 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes faceFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-6px) rotate(3deg) scale(1.05); }
+        }
+
+        .thermometer-scale {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding: 0 15px;
+            font-size: 13px;
+            color: #2C2C2C;
+            font-weight: 700;
+            z-index: 1;
+            position: relative;
+        }
+
+        .scale-item {
+            text-align: center;
+            background: rgba(253, 185, 39, 0.15);
+            padding: 6px 10px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(253, 185, 39, 0.3);
+            box-shadow: 0 2px 8px rgba(253, 185, 39, 0.2);
+        }
+
+        .thermometer-overflow-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #2C2C2C;
+            font-weight: 900;
+            font-size: 20px;
+            text-shadow:
+                0 2px 4px rgba(255,255,255,0.8),
+                0 0 15px rgba(253,185,39,0.6);
+            display: none;
+            z-index: 25;
+            animation: overflowBlink 1s ease-in-out infinite;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 2px solid #FDB927;
+        }
+
+        @keyframes overflowBlink {
+            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .current-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            text-align: center;
+            gap: 12px;
+        }
+
+        .stat-display {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 18px 12px;
+            border-radius: 18px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid rgba(253, 185, 39, 0.3);
+            box-shadow: 0 4px 15px rgba(253, 185, 39, 0.15);
+        }
+
+        .stat-display:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(253, 185, 39, 0.3);
+        }
+
+        .stat-emoji {
+            font-size: 36px;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 2px 4px rgba(253, 185, 39, 0.3));
+        }
+
+        .stat-emoji i {
+            color: #FDB927;
+            animation: statFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes statFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: 900;
+            color: #2C2C2C;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        /* Tour Progress */
+        .tour-progress {
+            background: linear-gradient(145deg, #ffffff, #f8f9fa);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.9);
+            margin-bottom: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .progress-time {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stops-timeline {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 25px;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 25px;
+            left: 20px;
+            height: 2px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2;
+            transition: width 0.5s;
+        }
+
+        .stops-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 3;
+        }
+
+        .stop-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .stop-item:hover {
+            transform: scale(1.1);
+        }
+
+        .stop-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 5px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .stop-item.completed .stop-circle {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+        }
+
+        .stop-item.current .stop-circle {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            animation: pulse 2s infinite, rotate 3s linear infinite;
+            transform: scale(1.15);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7), 0 6px 12px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 0 15px rgba(102, 126, 234, 0), 0 8px 16px rgba(102, 126, 234, 0.6); }
+        }
+
+        @keyframes rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .stop-name {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            max-width: 60px;
+        }
+
+        .stop-time {
+            font-size: 9px;
+            color: #999;
+        }
+
+        /* Selected Stop Info */
+        .selected-stop-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            color: white;
+            box-shadow:
+                0 8px 20px rgba(79, 172, 254, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s;
+        }
+
+        .selected-stop-info:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .stop-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .stop-details-left {
+            flex: 1;
+        }
+
+        .stop-details-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stop-details-address {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .stop-details-time {
+            font-size: 14px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .navigation-button {
+            width: 100%;
+            padding: 14px;
+            background: white;
+            color: #4facfe;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .navigation-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .navigation-button:active {
+            transform: scale(0.96);
+        }
+
+        /* Beer Counter */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
+            padding: 25px 20px;
+            border-radius: 18px;
+            color: #2C2C2C;
+            text-align: center;
+            box-shadow:
+                0 8px 20px rgba(253, 185, 39, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: shimmer 6s ease-in-out infinite;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(253, 185, 39, 0.4);
+        }
+
+        .stat-card.gradient-2 {
+            background: linear-gradient(135deg, #FFD670 0%, #FFC850 100%);
+            box-shadow:
+                0 8px 20px rgba(255, 214, 112, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+
+        .stat-card.gradient-3 {
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFF9E6 100%);
+            box-shadow:
+                0 8px 20px rgba(253, 185, 39, 0.2),
+                inset 0 1px 0 rgba(255,255,255,0.5);
+            border: 2px solid rgba(253, 185, 39, 0.3);
+        }
+
+        .stat-card.gradient-4 {
+            background: linear-gradient(135deg, #D4880F 0%, #C77A0A 100%);
+            color: white;
+            box-shadow:
+                0 8px 20px rgba(212, 136, 15, 0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        .beer-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .beer-selector h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .beer-sizes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .beer-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .type-btn {
+            padding: 10px 8px;
+            border: 2px solid #2C2C2C;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .type-btn.selected {
+            background: linear-gradient(135deg, #F4A300 0%, #FDB927 100%);
+            color: #2C2C2C;
+            border: 2px solid #2C2C2C;
+            box-shadow: 0 4px 12px rgba(253, 185, 39, 0.3);
+        }
+
+        .size-btn {
+            padding: 15px 10px;
+            border: 3px solid #2C2C2C;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .size-btn.selected {
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
+            color: #2C2C2C;
+            border: 3px solid #2C2C2C;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(253, 185, 39, 0.3);
+        }
+
+        .size-btn .size {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .size-btn .volume {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .alcohol-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .alcohol-input label {
+            flex: 1;
+            color: #666;
+        }
+
+        .alcohol-input input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .add-beer-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
+            color: #2C2C2C;
+            border: 3px solid #2C2C2C;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow:
+                0 8px 20px rgba(253, 185, 39, 0.4),
+                inset 0 2px 0 rgba(255,255,255,0.4);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .add-beer-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .add-beer-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(253, 185, 39, 0.5);
+        }
+
+        .add-beer-btn:hover::before {
+            width: 350px;
+            height: 350px;
+        }
+
+        .add-beer-btn:active {
+            transform: scale(0.96);
+        }
+
+        .beer-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+
+        .beer-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 2px solid #2C2C2C;
+        }
+
+        .beer-item-info {
+            flex: 1;
+        }
+
+        .beer-item-location {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .beer-item-details {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .remove-beer {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Share Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .modal-close {
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1001;
+            animation: slideDown 0.5s;
+            display: none;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #999;
+        }
+
+        .nav-item.active {
+            color: #FDB927;
+            font-weight: 700;
+        }
+
+        .nav-item .icon {
+            font-size: 24px;
+        }
+
+        .nav-item .label {
+            font-size: 10px;
+        }
+
+        /* Challenges/Achievements - Beer Theme */
+        .challenges-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .challenge-card {
+            background: linear-gradient(145deg, #FFFFFF, #FFF9E6);
+            padding: 18px;
+            border-radius: 18px;
+            box-shadow: 0 4px 15px rgba(253, 185, 39, 0.15);
+            border: 3px solid #2C2C2C;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(253, 185, 39, 0.3);
+        }
+
+        .challenge-card.completed {
+            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+            color: white;
+            border: 3px solid #2C2C2C;
+        }
+
+        .challenge-card.completed::after {
+            content: "✓";
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            background: rgba(255,255,255,0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* NEW Badge for newly unlocked challenges */
+        .challenge-card.new-unlock::before {
+            content: "NEW!";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #FF0000;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 900;
+            box-shadow: 0 2px 8px rgba(255, 0, 0, 0.5);
+            animation: badgePulse 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .challenge-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .challenge-icon i {
+            color: #FDB927;
+        }
+
+        .challenge-card.completed .challenge-icon i {
+            color: white;
+        }
+
+        .challenge-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #2C2C2C;
+        }
+
+        .challenge-card.completed .challenge-title {
+            color: white;
+        }
+
+        .challenge-description {
+            font-size: 14px;
+            opacity: 0.85;
+            line-height: 1.4;
+            color: #666;
+        }
+
+        .challenge-card.completed .challenge-description {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .challenge-points {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #FDB927, #F4A300);
+            color: #2C2C2C;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 900;
+            box-shadow: 0 3px 8px rgba(253, 185, 39, 0.4);
+        }
+
+        /* Photo Gallery - Beer Theme */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .photo-slot {
+            aspect-ratio: 1;
+            background: linear-gradient(145deg, #F5F5F5, #E0E0E0);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #2C2C2C;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .photo-slot:hover {
+            transform: scale(1.05);
+            border-color: #FDB927;
+            box-shadow: 0 4px 15px rgba(253, 185, 39, 0.3);
+        }
+
+        .photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-slot .add-photo {
+            font-size: 32px;
+            opacity: 0.5;
+        }
+
+        .photo-slot .add-photo i {
+            color: #FDB927;
+        }
+
+        .upload-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
+            color: #2C2C2C;
+            border: 3px solid #2C2C2C;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 6px 18px rgba(253, 185, 39, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(253, 185, 39, 0.4);
+        }
+
+        .upload-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-content">
+            <div class="welcome-title">🍺 Beer Tour Bologna</div>
+            <div class="welcome-subtitle">30° Compleanno di Marco • 1 Novembre 2025</div>
+            
+            <div class="profile-setup">
+                <input type="text" id="userName" class="profile-input" placeholder="Il tuo nome..." maxlength="20">
+                
+                <div class="profile-row">
+                    <input type="number" id="userWeight" class="profile-input" placeholder="Peso (kg)" min="40" max="150" value="70">
+                    <input type="number" id="userHeight" class="profile-input" placeholder="Altezza (cm)" min="140" max="220" value="175">
+                </div>
+                
+                <select id="userGender" class="profile-select">
+                    <option value="male">🚹 Uomo</option>
+                    <option value="female">🚺 Donna</option>
+                </select>
+                
+                <div class="profile-avatars" id="avatarGrid">
+                    <!-- Avatars will be generated -->
+                </div>
+                
+                <button class="start-button" onclick="startApp()">🎉 Inizia il Tour!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="user-info" style="cursor: pointer;" onclick="openSettings()">
+                        <span class="user-avatar" id="userAvatar"><i class="fas fa-beer"></i></span>
+                        <span id="userNameDisplay">Guest</span>
+                        <span style="margin-left: 5px; opacity: 0.7;"><i class="fas fa-gear"></i></span>
+                    </div>
+                </div>
+                <div class="header-center">
+                    <h1><i class="fas fa-beer-mug-empty"></i> Beer Tour</h1>
+                    <div class="subtitle">Marco's 30th <i class="fas fa-cake-candles"></i></div>
+                </div>
+                <div class="header-right">
+                    <button class="share-btn" onclick="syncWithSheet()" title="Sincronizza con gli altri"><i class="fas fa-sync"></i> Sync</button>
+                    <button class="share-btn" style="background: rgba(255,100,100,0.3); margin-left: 5px;" onclick="logout()"><i class="fas fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('home', this)">
+                <span class="icon"><i class="fas fa-house"></i></span>
+                <span>Home</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('counter', this)">
+                <span class="icon"><i class="fas fa-beer"></i></span>
+                <span>Birre</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('challenges', this)">
+                <span class="icon"><i class="fas fa-trophy"></i></span>
+                <span>Sfide</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('scoreboard', this)">
+                <span class="icon"><i class="fas fa-chart-simple"></i></span>
+                <span>Score</span>
+            </button>
+        </div>
+
+        <!-- Home Tab with NEW Alcohol Thermometer -->
+        <div id="home-tab" class="tab-content active">
+            <div class="thermometer-container">
+                <div class="thermometer-visual">
+                    <div class="thermometer-track">
+                        <div class="beer-liquid" id="beerLiquid" style="width: 0%;">
+                            <!-- Dynamic bubbles will be added here by CSS -->
+                        </div>
+                        <div class="thermometer-overflow-indicator" id="overflowIndicator">OVER!</div>
+                    </div>
+                    <div class="thermometer-pointer" id="thermometerPointer" style="left: 0;"></div>
+                    <div class="thermometer-face" id="beerFace">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                </div>
+                <div class="thermometer-scale">
+                    <div class="scale-item">0‰</div>
+                    <div class="scale-item">0.5‰</div>
+                    <div class="scale-item">1.0‰</div>
+                    <div class="scale-item">1.5‰</div>
+                    <div class="scale-item">2.0‰+</div>
+                </div>
+
+                <div class="current-stats">
+                    <div class="stat-display">
+                        <div class="stat-emoji"><i class="fas fa-beer"></i></div>
+                        <div class="stat-value" id="homeBeers">0</div>
+                        <div class="stat-label">Birre</div>
+                    </div>
+                    <div class="stat-display">
+                        <div class="stat-emoji"><i class="fas fa-glass-water"></i></div>
+                        <div class="stat-value" id="homeLiters">0L</div>
+                        <div class="stat-label">Litri</div>
+                    </div>
+                    <div class="stat-display">
+                        <div class="stat-emoji"><i class="fas fa-gauge-high"></i></div>
+                        <div class="stat-value" id="homeBAC">0.00‰</div>
+                        <div class="stat-label">Tasso</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tour-progress">
+                <div class="progress-header">
+                    <span class="progress-title">📍 Tappe del Tour</span>
+                    <span class="progress-time" id="tourTime">16:00 - 19:45</span>
+                </div>
+                <div class="stops-timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-progress" id="timelineProgress" style="width: 0%;"></div>
+                    <div class="stops-container" id="stopsContainer">
+                        <!-- Stops will be generated here -->
+                    </div>
+                </div>
+                
+                <div class="selected-stop-info" id="selectedStopInfo">
+                    <div class="stop-details">
+                        <div class="stop-details-left">
+                            <div class="stop-details-name" id="stopName">Osteria del Sole</div>
+                            <div class="stop-details-address" id="stopAddress">Vicolo Ranocchi 1/D</div>
+                        </div>
+                        <div class="stop-details-time" id="stopTime">16:00-16:30</div>
+                    </div>
+                    <button class="navigation-button" onclick="openGoogleMaps()">
+                        📍 Apri in Google Maps
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Counter Tab -->
+        <div id="counter-tab" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalBeers">0</div>
+                    <div class="stat-label">Birre Totali</div>
+                </div>
+                <div class="stat-card gradient-2">
+                    <div class="stat-value" id="totalLiters">0L</div>
+                    <div class="stat-label">Litri Totali</div>
+                </div>
+                <div class="stat-card gradient-3">
+                    <div class="stat-value" id="avgAlcohol">0%</div>
+                    <div class="stat-label">Media Alcolica</div>
+                </div>
+                <div class="stat-card gradient-4">
+                    <div class="stat-value" id="currentStop">1/6</div>
+                    <div class="stat-label">Tappa Attuale</div>
+                </div>
+            </div>
+
+            <div class="beer-selector">
+                <h3>Aggiungi Birra</h3>
+                <div class="beer-sizes">
+                    <div class="size-btn" onclick="selectSize('piccola', 0.2, this)">
+                        <div class="size">🍺</div>
+                        <div class="volume">Piccola (0.2L)</div>
+                    </div>
+                    <div class="size-btn selected" onclick="selectSize('media', 0.4, this)">
+                        <div class="size">🍺🍺</div>
+                        <div class="volume">Media (0.4L)</div>
+                    </div>
+                    <div class="size-btn" onclick="selectSize('grande', 0.5, this)">
+                        <div class="size">🍺🍺🍺</div>
+                        <div class="volume">Grande (0.5L)</div>
+                    </div>
+                </div>
+                <div class="alcohol-input">
+                    <label for="alcoholPercentage">Gradazione Alcolica:</label>
+                    <input type="number" id="alcoholPercentage" value="5.0" min="0" max="15" step="0.1"> %
+                </div>
+
+                <label style="display: block; margin-bottom: 8px; color: #666; font-weight: 600;">Varietà Birra:</label>
+                <div class="beer-types">
+                    <div class="type-btn selected" onclick="selectType('Bionda', this)">🌾 Bionda</div>
+                    <div class="type-btn" onclick="selectType('Rossa', this)">🔴 Rossa</div>
+                    <div class="type-btn" onclick="selectType('Scura', this)">⚫ Scura</div>
+                    <div class="type-btn" onclick="selectType('IPA', this)">🍊 IPA</div>
+                    <div class="type-btn" onclick="selectType('Lager', this)">💛 Lager</div>
+                    <div class="type-btn" onclick="selectType('Pils', this)">🌿 Pils</div>
+                    <div class="type-btn" onclick="selectType('Stout', this)">☕ Stout</div>
+                    <div class="type-btn" onclick="selectType('Weiss', this)">🌤️ Weiss</div>
+                </div>
+
+                <button class="add-beer-btn" onclick="addBeer()">
+                    ➕ Aggiungi Birra
+                </button>
+            </div>
+
+            <div class="beer-list" id="beerList">
+                <!-- Beer items will be added here -->
+            </div>
+        </div>
+
+        <!-- Challenges Tab -->
+        <div id="challenges-tab" class="tab-content">
+            <h3 style="color: #2C2C2C; margin-bottom: 20px; font-size: 20px;">
+                <i class="fas fa-trophy" style="color: #FDB927; margin-right: 8px;"></i>
+                Sfide & Achievements
+            </h3>
+            <div class="challenges-list" id="challengesList">
+                <!-- Challenges will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Photos Tab (NEW - Separated from Challenges) -->
+        <div id="photos-tab" class="tab-content">
+            <h3 style="color: #2C2C2C; margin-bottom: 20px; font-size: 20px;">
+                <i class="fas fa-images" style="color: #FDB927; margin-right: 8px;"></i>
+                Galleria Foto del Tour
+            </h3>
+            <div class="photo-grid" id="photoGrid">
+                <!-- Photo slots will be generated -->
+            </div>
+
+            <!-- Hidden inputs for camera and gallery -->
+            <input type="file" id="photoCameraInput" style="display: none;" accept="image/*" capture="environment">
+            <input type="file" id="photoGalleryInput" style="display: none;" accept="image/*" multiple>
+
+            <!-- Two buttons: Camera and Gallery -->
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="upload-btn" style="flex: 1;" onclick="document.getElementById('photoCameraInput').click()">
+                    <i class="fas fa-camera"></i> Scatta Foto
+                </button>
+                <button class="upload-btn" style="flex: 1; background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);" onclick="document.getElementById('photoGalleryInput').click()">
+                    <i class="fas fa-images"></i> Da Galleria
+                </button>
+            </div>
+        </div>
+
+        <!-- Scoreboard Tab -->
+        <div id="scoreboard-tab" class="tab-content">
+            <div style="text-align: center; padding: 40px 20px;">
+                <div style="font-size: 60px; margin-bottom: 20px;">📊</div>
+                <h2 style="color: #667eea; margin-bottom: 15px;">Classifica Gruppo</h2>
+                <p style="color: #666; margin-bottom: 30px;">La classifica condivisa sarà disponibile quando tutti i 7 amici avranno iniziato il tour!</p>
+                <div style="background: linear-gradient(145deg, #f8f9fa, #e9ecef); padding: 25px; border-radius: 20px; text-align: left;">
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 14px; color: #999; margin-bottom: 5px;">I tuoi progressi:</div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <span style="background: #667eea; color: white; padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold;" id="yourRank">In attesa...</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 13px; color: #666; line-height: 1.6;">
+                        💡 <strong>Suggerimento:</strong> Usa il pulsante "Sync" in alto per sincronizzare i tuoi progressi con gli amici!
+                    </div>
+                </div>
+                <div style="margin-top: 30px; padding: 20px; background: white; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <div style="font-weight: bold; margin-bottom: 15px; color: #333;">🎯 I tuoi record personali:</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="recordBeers">0</div>
+                            <div style="font-size: 11px; color: #666;">Birre bevute</div>
+                        </div>
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                            <div style="font-size: 24px; font-weight: bold; color: #f093fb;" id="recordBAC">0.00‰</div>
+                            <div style="font-size: 11px; color: #666;">Tasso massimo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="quickNav('home', this)">
+            <span class="icon"><i class="fas fa-house"></i></span>
+            <span class="label">Home</span>
+        </div>
+        <div class="nav-item" onclick="quickNav('counter', this)">
+            <span class="icon"><i class="fas fa-beer"></i></span>
+            <span class="label">Birre</span>
+        </div>
+        <div class="nav-item" onclick="quickNav('challenges', this)">
+            <span class="icon"><i class="fas fa-trophy"></i></span>
+            <span class="label">Sfide</span>
+        </div>
+        <div class="nav-item" onclick="quickNav('scoreboard', this)">
+            <span class="icon"><i class="fas fa-chart-simple"></i></span>
+            <span class="label">Score</span>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let appState = {
+            user: {
+                name: 'Guest',
+                avatar: '<i class="fas fa-beer"></i>',
+                id: null
+            },
+            currentLocation: 0,
+            beers: [],
+            selectedSize: 'media',
+            selectedVolume: 0.4,
+            selectedType: 'Bionda',
+            points: 0,
+            weight: 70,
+            height: 175,
+            gender: 'male',
+            photos: [],
+            challenges: [],
+            beersPerLocation: [0, 0, 0, 0, 0, 0],
+            stopArrivalTimes: []
+        };
+
+        // Badge notification tracking
+        let unlockedChallengesCount = 0;
+        let hasVisitedChallenges = false;
+
+        // Challenges Data with Font Awesome icons
+        const challengesData = [
+            { id: 1, icon: "fa-camera", title: "Selfie Master", description: "Fai un selfie di gruppo in ogni tappa", points: 50, completed: false },
+            { id: 2, icon: "fa-beer", title: "Assaggiatore", description: "Prova almeno 5 birre diverse", points: 30, completed: false, autoUnlock: true },
+            { id: 4, icon: "fa-users", title: "Socializzatore", description: "Fai amicizia con qualcuno al bar", points: 20, completed: false },
+            { id: 5, icon: "fa-images", title: "Fotografo", description: "Scatta 9+ foto durante il tour", points: 25, completed: false, autoUnlock: true },
+            { id: 6, icon: "fa-microphone", title: "Karaoke Star", description: "Canta una canzone al festeggiato", points: 35, completed: false },
+            { id: 8, icon: "fa-cake-candles", title: "Birthday Boy", description: "Fai gli auguri a Marco in modo creativo", points: 50, completed: false },
+            { id: 9, icon: "fa-pizza-slice", title: "Gourmet", description: "Prendi mortadella all'Osteria del Sole", points: 20, completed: false },
+            { id: 10, icon: "fa-trophy", title: "Completista", description: "Visita tutte e 6 le birrerie", points: 100, completed: false, autoUnlock: true },
+            { id: 11, icon: "fa-glass-water", title: "Etilista", description: "Raggiungi BAC 2.0‰ dopo la 2° tappa", points: 30, completed: false, autoUnlock: true },
+            { id: 12, icon: "fa-fire", title: "Etilista Pro", description: "Raggiungi BAC 3.5‰ entro la 2° tappa", points: 50, completed: false, autoUnlock: true },
+            { id: 13, icon: "fa-skull-crossbones", title: "Etilista Supremo", description: "Raggiungi BAC 5.0‰ entro la 3° tappa", points: 75, completed: false, autoUnlock: true },
+            { id: 14, icon: "fa-person-walking", title: "Passeggiata Pensionato", description: "Mantieni BAC <1.5‰ nelle prime 4 tappe", points: 40, completed: false, autoUnlock: true },
+            { id: 15, icon: "fa-bed", title: "Pensione Completa", description: "Mantieni BAC <2.0‰ per tutto il tour", points: 60, completed: false, autoUnlock: true },
+            { id: 16, icon: "fa-wine-bottle", title: "Collezionista", description: "Prova almeno 5 varietà diverse di birra", points: 45, completed: false, autoUnlock: true },
+            { id: 17, icon: "fa-champagne-glasses", title: "Un Bicchiere di Troppo", description: "Prendi almeno 2 birre in ogni tappa", points: 55, completed: false, autoUnlock: true },
+            { id: 18, icon: "fa-cake-candles", title: "Too Old to Die Young", description: "Achievement speciale per 'Prosciutto'", points: 100, completed: false, autoUnlock: true }
+        ];
+
+        // Locations Data with coordinates
+        const locations = [
+            {
+                name: "Osteria del Sole",
+                address: "Vicolo Ranocchi 1/D, 40124 Bologna",
+                lat: 44.49354,
+                lng: 11.34332,
+                time: "16:00-16:30",
+                emoji: "🏛️",
+                description: "Fondata nel 1465, è l'osteria più antica di Bologna! 🏛️ Qui non vendono cibo, solo vino e birra - devi portare il tuo pasto. Atmosfera autentica con tavoli in legno consumati da secoli di brindisi.",
+                specialBeer: "Birra Baladin Super",
+                founded: "1465",
+                specialty: "BYO Food - Porta il tuo cibo!"
+            },
+            {
+                name: "Celtic Druid Irish Pub",
+                address: "Via Caduti di Cefalonia 5/c, 40125 Bologna",
+                lat: 44.49396,
+                lng: 11.34194,
+                time: "16:40-17:10",
+                emoji: "🍀",
+                description: "Autentico pub irlandese nel cuore di Bologna! 🍀 Oltre 20 birre alla spina tra cui Guinness e Kilkenny. Ambiente accogliente con musica live nei weekend.",
+                specialBeer: "Guinness alla spina perfetta",
+                founded: "2003",
+                specialty: "Fish & Chips + Guinness"
+            },
+            {
+                name: "Lab16",
+                address: "Via Zamboni 16/D, 40126 Bologna",
+                lat: 44.49661,
+                lng: 11.35203,
+                time: "17:20-17:50",
+                emoji: "🔬",
+                description: "Birrificio artigianale e laboratorio sperimentale! 🔬 Qui producono birre uniche con ingredienti locali. Ambiente moderno nella zona universitaria, perfetto per scoprire birre innovative.",
+                specialBeer: "Birre artigianali autoprodotte",
+                founded: "2015",
+                specialty: "Sperimentazione + Birre stagionali"
+            },
+            {
+                name: "The Cluricaune Irish Pub",
+                address: "Via Zamboni 18/B, 40126 Bologna",
+                lat: 44.49676,
+                lng: 11.35248,
+                time: "17:55-18:25",
+                emoji: "☘️",
+                description: "Il pub più famoso di via Zamboni! ☘️ Due piani di atmosfera irlandese pura. Oltre 15 birre alla spina e una selezione vastissima di whiskey. Punto di ritrovo storico per studenti e appassionati.",
+                specialBeer: "Murphy's Irish Stout",
+                founded: "1997",
+                specialty: "Atmosfera autentica + Happy Hour"
+            },
+            {
+                name: "Mutenye Pub",
+                address: "Via del Pratello 44/A, 40122 Bologna",
+                lat: 44.49326,
+                lng: 11.33604,
+                time: "18:40-19:10",
+                emoji: "🥨",
+                description: "Gemma nascosta del Pratello! 🥨 Pub rock con selezione curata di birre belghe e tedesche. Ambiente informale, musica rock dal vivo e aperitivo generoso. Locale cult tra i bolognesi DOC.",
+                specialBeer: "Birre belghe d'abbazia",
+                founded: "2005",
+                specialty: "Rock music + Aperitivo ricco"
+            },
+            {
+                name: "Birreria del Pratello",
+                address: "Via del Pratello 24, 40122 Bologna",
+                lat: 44.49348,
+                lng: 11.33797,
+                time: "19:15-19:45",
+                emoji: "🎉",
+                description: "Gran finale nel cuore del Pratello! 🎉 Oltre 30 birre alla spina e selezione vastissima in bottiglia. Cucina tipica bolognese, ambiente vivace. Il posto perfetto per concludere il tour!",
+                specialBeer: "IPA artigianali + Bionde belghe",
+                founded: "2010",
+                specialty: "Tigelle + 30 birre alla spina"
+            }
+        ];
+
+        // Avatar options with Font Awesome icons
+        const avatarOptions = [
+            '<i class="fas fa-user"></i>',
+            '<i class="fas fa-user-tie"></i>',
+            '<i class="fas fa-user-astronaut"></i>',
+            '<i class="fas fa-user-ninja"></i>',
+            '<i class="fas fa-user-secret"></i>',
+            '<i class="fas fa-beer"></i>',
+            '<i class="fas fa-champagne-glasses"></i>',
+            '<i class="fas fa-wine-glass"></i>',
+            '<i class="fas fa-martini-glass"></i>',
+            '<i class="fas fa-beer-mug-empty"></i>'
+        ];
+
+        // Initialize Avatar Grid
+        function initAvatarGrid() {
+            const grid = document.getElementById('avatarGrid');
+            grid.innerHTML = '';
+
+            avatarOptions.forEach((avatar, index) => {
+                const div = document.createElement('div');
+                div.className = 'avatar-option';
+                if (index === 5) div.classList.add('selected'); // Select beer icon by default
+                div.innerHTML = avatar;
+                div.onclick = () => selectAvatar(avatar, div);
+                grid.appendChild(div);
+            });
+        }
+
+        // Initialize App
+        function startApp() {
+            const name = document.getElementById('userName').value.trim() || 'Guest';
+            const weight = parseInt(document.getElementById('userWeight').value) || 70;
+            const height = parseInt(document.getElementById('userHeight').value) || 175;
+            const gender = document.getElementById('userGender').value || 'male';
+            
+            appState.user.name = name;
+            appState.user.id = generateUserId();
+            appState.weight = weight;
+            appState.height = height;
+            appState.gender = gender;
+            
+            // Save to localStorage
+            try {
+                localStorage.setItem('beerTourUser', JSON.stringify(appState.user));
+                localStorage.setItem('beerTourProfile', JSON.stringify({
+                    weight: weight,
+                    height: height,
+                    gender: gender
+                }));
+            } catch(e) {
+                console.log('localStorage not available');
+            }
+            
+            // Hide welcome screen
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            
+            // Update UI
+            document.getElementById('userNameDisplay').textContent = name;
+            document.getElementById('userAvatar').innerHTML = appState.user.avatar;
+            
+            // Initialize components
+            initializeStops();
+            updateSelectedStop(0);
+            loadChallenges();
+            initPhotoGallery();
+
+            // Check challenges immediately (e.g., "Too Old to Die Young" for Prosciutto)
+            checkChallenges();
+
+            showNotification(`🍺 Benvenuto ${name}! Buon tour!`);
+        }
+
+        function selectAvatar(avatarHTML, element) {
+            document.querySelectorAll('.avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            appState.user.avatar = avatarHTML;
+        }
+
+        function generateUserId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Initialize Stops Timeline
+        function initializeStops() {
+            const container = document.getElementById('stopsContainer');
+            container.innerHTML = '';
+            
+            locations.forEach((loc, index) => {
+                const stopDiv = document.createElement('div');
+                stopDiv.className = 'stop-item';
+                if (index === 0) stopDiv.classList.add('current');
+                stopDiv.onclick = () => selectStop(index);
+                
+                stopDiv.innerHTML = `
+                    <div class="stop-circle">${loc.emoji}</div>
+                    <div class="stop-name">${loc.name.split(' ')[0]}</div>
+                    <div class="stop-time">${loc.time.split('-')[0]}</div>
+                `;
+                
+                container.appendChild(stopDiv);
+            });
+        }
+
+        function selectStop(index) {
+            if (index < 0 || index >= locations.length) return;
+
+            appState.currentLocation = index;
+            appState.stopArrivalTimes[index] = new Date();
+            updateStopsProgress();
+            updateSelectedStop(index);
+            document.getElementById('currentStop').textContent = `${index + 1}/6`;
+            showNotification(`📍 Tappa: ${locations[index].name}`);
+            checkChallenges(); // Check if any challenges are unlocked with new location
+            saveState();
+        }
+
+        function updateSelectedStop(index) {
+            const loc = locations[index];
+            document.getElementById('stopName').textContent = loc.name;
+            document.getElementById('stopAddress').textContent = loc.address;
+            document.getElementById('stopTime').textContent = loc.time;
+            showStopDescription(loc);
+        }
+
+        function showStopDescription(location) {
+            const stopInfo = document.getElementById('selectedStopInfo');
+            if (!stopInfo) return;
+
+            // Remove existing description
+            const existing = stopInfo.querySelector('.stop-description');
+            if (existing) existing.remove();
+
+            // Create description div
+            const descDiv = document.createElement('div');
+            descDiv.className = 'stop-description';
+            descDiv.innerHTML = `
+                <div style="background: linear-gradient(145deg, #FFF9E6, #FFFFFF); padding: 15px; border-radius: 12px; margin: 15px 0; border: 2px solid #2C2C2C;">
+                    <p style="color: #2C2C2C; font-size: 13px; line-height: 1.6; margin-bottom: 10px;">
+                        ${location.description}
+                    </p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                        <div style="background: #FDB927; padding: 8px; border-radius: 8px; border: 2px solid #2C2C2C;">
+                            <div style="font-size: 10px; font-weight: 600; color: #2C2C2C;">🍺 Birra Speciale</div>
+                            <div style="font-size: 11px; color: #2C2C2C; margin-top: 3px;">${location.specialBeer}</div>
+                        </div>
+                        <div style="background: #F4A300; padding: 8px; border-radius: 8px; border: 2px solid #2C2C2C;">
+                            <div style="font-size: 10px; font-weight: 600; color: #2C2C2C;">📅 Fondato</div>
+                            <div style="font-size: 11px; color: #2C2C2C; margin-top: 3px;">${location.founded}</div>
+                        </div>
+                    </div>
+                    <div style="background: #66BB6A; padding: 10px; border-radius: 8px; margin-top: 10px; border: 2px solid #2C2C2C;">
+                        <div style="font-size: 10px; font-weight: 600; color: white;">✨ Specialità</div>
+                        <div style="font-size: 12px; color: white; margin-top: 3px; font-weight: 700;">${location.specialty}</div>
+                    </div>
+                </div>
+            `;
+
+            // Insert before navigation button
+            const navButton = stopInfo.querySelector('.navigation-button');
+            if (navButton) {
+                stopInfo.insertBefore(descDiv, navButton);
+            } else {
+                stopInfo.appendChild(descDiv);
+            }
+        }
+
+        function updateStopsProgress() {
+            const stops = document.querySelectorAll('.stop-item');
+            stops.forEach((stop, index) => {
+                stop.classList.remove('current', 'completed');
+                if (index < appState.currentLocation) {
+                    stop.classList.add('completed');
+                } else if (index === appState.currentLocation) {
+                    stop.classList.add('current');
+                }
+            });
+            
+            const progress = (appState.currentLocation / (locations.length - 1)) * 100;
+            document.getElementById('timelineProgress').style.width = `${progress}%`;
+        }
+
+        // Google Maps Navigation
+        function openGoogleMaps() {
+            const loc = locations[appState.currentLocation];
+            const encodedAddress = encodeURIComponent(loc.address);
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}`;
+            window.open(url, '_blank');
+        }
+
+        // Tab Switching
+        function switchTab(tabName, element) {
+            // Handle badge removal when visiting challenges tab
+            if (tabName === 'challenges') {
+                hasVisitedChallenges = true;
+
+                // Remove NEW badges after 2 seconds
+                setTimeout(() => {
+                    challengesData.forEach(c => c.isNew = false);
+                    loadChallenges();
+                    updateChallengesBadge();
+                }, 2000);
+            }
+
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const tabElement = document.getElementById(`${tabName}-tab`);
+            if (tabElement) {
+                tabElement.classList.add('active');
+            }
+            if (element) element.classList.add('active');
+        }
+
+        function quickNav(tabName, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            const tabElement = document.getElementById(`${tabName}-tab`);
+            if (tabElement) {
+                tabElement.classList.add('active');
+            }
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            if (element) element.classList.add('active');
+            
+            // Update top tabs to match
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                const btnText = btn.querySelector('span:last-child').textContent.toLowerCase();
+                if (btnText.includes(tabName.substring(0, 3))) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Beer Functions
+        function selectSize(size, volume, element) {
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            appState.selectedSize = size;
+            appState.selectedVolume = volume;
+        }
+
+        function selectType(type, element) {
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            appState.selectedType = type;
+        }
+
+        function addBeer() {
+            const alcohol = parseFloat(document.getElementById('alcoholPercentage').value) || 5.0;
+            const location = locations[appState.currentLocation].name;
+
+            const beer = {
+                id: Date.now(),
+                location: location,
+                size: appState.selectedSize,
+                volume: appState.selectedVolume,
+                type: appState.selectedType,
+                alcohol: alcohol,
+                time: new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+            };
+
+            appState.beers.push(beer);
+            appState.beersPerLocation[appState.currentLocation]++; // Track beers per location
+            updateBeerStats();
+            updateBeerList();
+            updateThermometer();
+            checkChallenges(); // Check for auto-unlock achievements
+            saveState();
+
+            showNotification(`🍺 Birra aggiunta! ${appState.selectedType} (${appState.selectedSize} - ${alcohol}%)`);
+        }
+
+        function updateBeerStats() {
+            const totalBeers = appState.beers.length;
+            const totalLiters = appState.beers.reduce((sum, beer) => sum + beer.volume, 0);
+            let avgAlcohol = 0;
+
+            if (totalBeers > 0) {
+                avgAlcohol = (appState.beers.reduce((sum, beer) => sum + beer.alcohol, 0) / totalBeers).toFixed(1);
+            }
+
+            document.getElementById('totalBeers').textContent = totalBeers;
+            document.getElementById('totalLiters').textContent = totalLiters.toFixed(1) + 'L';
+            document.getElementById('avgAlcohol').textContent = avgAlcohol + '%';
+
+            document.getElementById('homeBeers').textContent = totalBeers;
+            document.getElementById('homeLiters').textContent = totalLiters.toFixed(1) + 'L';
+
+            // Update records
+            const bac = calculateBAC();
+            document.getElementById('recordBeers').textContent = totalBeers;
+            document.getElementById('recordBAC').textContent = bac.toFixed(2) + '‰';
+        }
+
+        function updateBeerList() {
+            const list = document.getElementById('beerList');
+            if (!list) return;
+            
+            list.innerHTML = '';
+            
+            appState.beers.slice().reverse().forEach(beer => {
+                const item = document.createElement('div');
+                item.className = 'beer-item';
+                item.innerHTML = `
+                    <div class="beer-item-info">
+                        <div class="beer-item-location">${beer.location}</div>
+                        <div class="beer-item-details">
+                            ${beer.type || 'Bionda'} • ${beer.size} (${beer.volume}L) • ${beer.alcohol}% • ${beer.time}
+                        </div>
+                    </div>
+                    <button class="remove-beer" onclick="removeBeer(${beer.id})">❌</button>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function removeBeer(id) {
+            appState.beers = appState.beers.filter(beer => beer.id !== id);
+            updateBeerStats();
+            updateBeerList();
+            updateThermometer();
+            saveState();
+        }
+
+        // BEER LIQUID Thermometer Update
+        function updateThermometer() {
+            const bac = calculateBAC();
+            document.getElementById('homeBAC').textContent = bac.toFixed(2) + '‰';
+
+            // Calculate percentage (0-100%)
+            // Max display at 6.0‰ - everything above is pinned to 100%
+            // Con 6.0‰ il termometro regge molte più birre (10-15 birre medie)
+            const maxBAC = 6.0;
+            const percentage = Math.min(100, (bac / maxBAC) * 100);
+
+            // Update BEER LIQUID width (fills from left to right)
+            const liquidElement = document.getElementById('beerLiquid');
+            if (liquidElement) {
+                liquidElement.style.width = `${percentage}%`;
+            }
+
+            // Update pointer position (follows the beer level at right edge)
+            const pointerElement = document.getElementById('thermometerPointer');
+            if (pointerElement) {
+                if (percentage > 0) {
+                    // Show pointer and position it at the end of the beer liquid
+                    pointerElement.classList.add('visible');
+                    const containerWidth = document.querySelector('.thermometer-track').offsetWidth || 316;
+                    const containerHeight = document.querySelector('.thermometer-track').offsetHeight || 48;
+                    const availableWidth = containerWidth - 6;
+                    const pointerPos = 3 + Math.min((percentage / 100) * availableWidth, availableWidth - 2);
+                    pointerElement.style.left = `${Math.max(3, pointerPos)}px`;
+
+                    // Calculate pointer height based on position to follow border-radius perimeter
+                    // The border-radius is 48px, so at the edges the thermometer is narrower
+                    const borderRadius = 48;
+                    const normalizedPos = pointerPos / containerWidth; // 0 to 1
+
+                    // Distance from center (0 at center, 1 at edges)
+                    const distanceFromCenter = Math.abs(normalizedPos - 0.5) * 2;
+
+                    // Calculate height reduction based on circular arc
+                    // Using quadratic curve to approximate the border-radius shape
+                    const heightReduction = Math.pow(distanceFromCenter, 2) * (borderRadius / containerHeight);
+                    const pointerHeight = Math.max(
+                        containerHeight * (1 - heightReduction) - 6,
+                        containerHeight * 0.3  // Minimum 30% height at edges
+                    );
+
+                    pointerElement.style.height = `${pointerHeight}px`;
+                } else {
+                    // Hide pointer when no beer
+                    pointerElement.classList.remove('visible');
+                }
+            }
+
+            // Update face icon based on BAC with MORE gradations
+            const faceElement = document.getElementById('beerFace');
+            if (faceElement) {
+                let faceIcon;
+                let faceColor = '#FDB927';
+
+                if (bac < 0.2) {
+                    // Sobrio - Fresh start
+                    faceIcon = '<i class="fas fa-face-smile-beam"></i>';
+                    faceColor = '#2E7D32';
+                } else if (bac < 0.4) {
+                    // Leggermente allegro
+                    faceIcon = '<i class="fas fa-smile"></i>';
+                    faceColor = '#4CAF50';
+                } else if (bac < 0.6) {
+                    // Allegro
+                    faceIcon = '<i class="fas fa-grin"></i>';
+                    faceColor = '#7CB342';
+                } else if (bac < 0.8) {
+                    // Euforico
+                    faceIcon = '<i class="fas fa-grin-beam"></i>';
+                    faceColor = '#9CCC65';
+                } else if (bac < 1.0) {
+                    // Brillo
+                    faceIcon = '<i class="fas fa-grin-stars"></i>';
+                    faceColor = '#CDDC39';
+                } else if (bac < 1.3) {
+                    // Inizio confusione
+                    faceIcon = '<i class="fas fa-face-dizzy"></i>';
+                    faceColor = '#FDD835';
+                } else if (bac < 1.6) {
+                    // Alticcio
+                    faceIcon = '<i class="fas fa-face-grin-tongue"></i>';
+                    faceColor = '#FFB300';
+                } else if (bac < 2.0) {
+                    // Stanco
+                    faceIcon = '<i class="fas fa-face-tired"></i>';
+                    faceColor = '#FF9800';
+                } else if (bac < 2.5) {
+                    // Molto stanco
+                    faceIcon = '<i class="fas fa-face-flushed"></i>';
+                    faceColor = '#FF7043';
+                } else if (bac < 3.5) {
+                    // Problematico
+                    faceIcon = '<i class="fas fa-face-frown-open"></i>';
+                    faceColor = '#FF5722';
+                } else if (bac < 5.0) {
+                    // Molto male
+                    faceIcon = '<i class="fas fa-face-sad-cry"></i>';
+                    faceColor = '#F44336';
+                } else {
+                    // Critico
+                    faceIcon = '<i class="fas fa-skull"></i>';
+                    faceColor = '#D32F2F';
+                }
+
+                faceElement.innerHTML = faceIcon;
+                const iconElement = faceElement.querySelector('i');
+                if (iconElement) {
+                    iconElement.style.color = faceColor;
+                }
+                // Emoji is now centered with CSS (left: 50%; transform: translateX(-50%))
+            }
+
+            // Show overflow indicator if over scale
+            const overflowElement = document.getElementById('overflowIndicator');
+            if (overflowElement) {
+                if (bac > maxBAC) {
+                    overflowElement.style.display = 'block';
+                    overflowElement.textContent = `${bac.toFixed(1)}‰!`;
+                } else {
+                    overflowElement.style.display = 'none';
+                }
+            }
+        }
+
+        // CORRECT BAC Calculation Formula
+        function calculateBAC() {
+            if (appState.beers.length === 0) return 0;
+            
+            // Calculate total alcohol in grams
+            const totalAlcoholGrams = appState.beers.reduce((sum, beer) => {
+                // volume in L * 1000 = ml
+                // ml * (alcohol% / 100) = ml of pure alcohol
+                // ml of pure alcohol * 0.789 = grams of alcohol
+                const alcoholGrams = beer.volume * 1000 * (beer.alcohol / 100) * 0.789;
+                return sum + alcoholGrams;
+            }, 0);
+            
+            // Widmark formula: BAC = (alcohol in grams / (body weight in grams * r)) * 1000
+            // r = 0.68 for men, 0.55 for women
+            // Result is in per mille (‰)
+            const r = appState.gender === 'male' ? 0.68 : 0.55;
+            const bodyWeightGrams = appState.weight * 1000;
+            
+            // The correct formula
+            const bac = (totalAlcoholGrams / (bodyWeightGrams * r)) * 1000;
+            
+            console.log('Debug BAC calculation:', {
+                beers: appState.beers.length,
+                totalAlcoholGrams: totalAlcoholGrams.toFixed(2),
+                weight: appState.weight,
+                gender: appState.gender,
+                r: r,
+                bac: bac.toFixed(2)
+            });
+            
+            return Math.max(0, bac);
+        }
+
+        // Settings and Logout Functions
+        function openSettings() {
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">⚙️ Impostazioni Profilo</h2>
+                        <button class="modal-close" onclick="this.closest('.modal').remove()">×</button>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <input type="text" id="editName" value="${appState.user.name}" placeholder="Nome" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="editWeight" value="${appState.weight}" placeholder="Peso (kg)" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <input type="number" id="editHeight" value="${appState.height}" placeholder="Altezza (cm)" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                        </div>
+                        <select id="editGender" style="padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
+                            <option value="male" ${appState.gender === 'male' ? 'selected' : ''}>🚹 Uomo</option>
+                            <option value="female" ${appState.gender === 'female' ? 'selected' : ''}>🚺 Donna</option>
+                        </select>
+                        <button onclick="saveSettings()" style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                            💾 Salva Modifiche
+                        </button>
+                        <button onclick="resetOnlyBeers()" style="padding: 12px; background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                            🍺 Reset Solo Birre
+                        </button>
+                        <button onclick="resetApp()" style="padding: 12px; background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                            🗑️ Reset Completo
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function saveSettings() {
+            const name = document.getElementById('editName').value || 'Guest';
+            const weight = parseInt(document.getElementById('editWeight').value) || 70;
+            const height = parseInt(document.getElementById('editHeight').value) || 175;
+            const gender = document.getElementById('editGender').value || 'male';
+            
+            appState.user.name = name;
+            appState.weight = weight;
+            appState.height = height;
+            appState.gender = gender;
+            
+            // Update UI
+            document.getElementById('userNameDisplay').textContent = name;
+            
+            // Save to localStorage
+            try {
+                localStorage.setItem('beerTourUser', JSON.stringify(appState.user));
+                localStorage.setItem('beerTourProfile', JSON.stringify({
+                    weight: weight,
+                    height: height,
+                    gender: gender
+                }));
+            } catch(e) {
+                console.log('Could not save to localStorage');
+            }
+            
+            // Recalculate BAC with new values
+            updateThermometer();
+            saveState();
+            
+            // Close modal
+            document.querySelector('.modal').remove();
+            showNotification('✅ Profilo aggiornato!');
+        }
+        
+        function resetOnlyBeers() {
+            if (confirm('Vuoi resettare solo le birre bevute?')) {
+                appState.beers = [];
+                updateBeerStats();
+                updateBeerList();
+                updateThermometer();
+                saveState();
+                document.querySelector('.modal').remove();
+                showNotification('🍺 Birre resettate!');
+            }
+        }
+        
+        function logout() {
+            if (confirm('Vuoi davvero uscire? Questo resetterà tutti i dati del tour.')) {
+                resetApp();
+            }
+        }
+        
+        function resetApp() {
+            // Clear all localStorage
+            try {
+                localStorage.removeItem('beerTourUser');
+                localStorage.removeItem('beerTourProfile');
+                localStorage.removeItem('beerTourState');
+            } catch(e) {
+                console.log('Could not clear localStorage');
+            }
+            
+            // Reload the page
+            window.location.reload();
+        }
+
+        // Save State
+        function saveState() {
+            try {
+                // Sync challenges completed status to appState
+                appState.challenges = challengesData.map(c => ({
+                    id: c.id,
+                    completed: c.completed
+                }));
+                localStorage.setItem('beerTourState', JSON.stringify(appState));
+            } catch(e) {
+                console.log('Could not save state to localStorage');
+            }
+        }
+
+        // Challenges System
+        function loadChallenges() {
+            const container = document.getElementById('challengesList');
+            if (!container) return;
+
+            container.innerHTML = '';
+
+            challengesData.forEach(challenge => {
+                const card = document.createElement('div');
+                card.className = `challenge-card ${challenge.completed ? 'completed' : ''} ${challenge.isNew ? 'new-unlock' : ''}`;
+                card.onclick = () => toggleChallenge(challenge.id);
+
+                card.innerHTML = `
+                    <div class="challenge-icon"><i class="fas ${challenge.icon}"></i></div>
+                    <div class="challenge-title">${challenge.title}</div>
+                    <div class="challenge-description">${challenge.description}</div>
+                    ${!challenge.completed ? `<div class="challenge-points">+${challenge.points}</div>` : ''}
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function toggleChallenge(id) {
+            const challenge = challengesData.find(c => c.id === id);
+            if (!challenge) return;
+
+            challenge.completed = !challenge.completed;
+
+            if (challenge.completed) {
+                appState.points += challenge.points;
+                showNotification(`🏆 Achievement Sbloccato! +${challenge.points} punti`);
+            } else {
+                appState.points = Math.max(0, appState.points - challenge.points);
+            }
+
+            loadChallenges();
+            updateRecordPoints();
+            saveState();
+        }
+
+        function checkChallenges() {
+            let unlocked = false;
+            const bac = calculateBAC();
+
+            // AUTO: Assaggiatore - 5+ beers (id: 2, index 1)
+            if (appState.beers.length >= 5 && !challengesData[1].completed) {
+                challengesData[1].completed = true;
+                challengesData[1].isNew = true;
+                appState.points += challengesData[1].points;
+                showNotification(`🏆 "${challengesData[1].title}" Sbloccato! +${challengesData[1].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Completista - All 6 locations (id: 10, index 7)
+            if (appState.currentLocation === 5 && !challengesData[7].completed) {
+                challengesData[7].completed = true;
+                challengesData[7].isNew = true;
+                appState.points += challengesData[7].points;
+                showNotification(`🏆 "${challengesData[7].title}" Sbloccato! +${challengesData[7].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Etilista (id: 11, index 8)
+            if (bac >= 2.0 && appState.currentLocation >= 1 && !challengesData[8].completed) {
+                challengesData[8].completed = true;
+                challengesData[8].isNew = true;
+                appState.points += challengesData[8].points;
+                showNotification(`💛 "${challengesData[8].title}" Sbloccato! +${challengesData[8].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Etilista Pro (id: 12, index 9)
+            if (bac >= 3.5 && appState.currentLocation <= 1 && !challengesData[9].completed) {
+                challengesData[9].completed = true;
+                challengesData[9].isNew = true;
+                appState.points += challengesData[9].points;
+                showNotification(`🔥 "${challengesData[9].title}" Sbloccato! +${challengesData[9].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Etilista Supremo (id: 13, index 10)
+            if (bac >= 5.0 && appState.currentLocation <= 2 && !challengesData[10].completed) {
+                challengesData[10].completed = true;
+                challengesData[10].isNew = true;
+                appState.points += challengesData[10].points;
+                showNotification(`💀 "${challengesData[10].title}" Sbloccato! +${challengesData[10].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Passeggiata Pensionato (id: 14, index 11)
+            if (bac < 1.5 && appState.currentLocation >= 3 && !challengesData[11].completed) {
+                challengesData[11].completed = true;
+                challengesData[11].isNew = true;
+                appState.points += challengesData[11].points;
+                showNotification(`🚶 "${challengesData[11].title}" Sbloccato! +${challengesData[11].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Pensione Completa (id: 15, index 12)
+            if (bac < 2.0 && appState.currentLocation === 5 && !challengesData[12].completed) {
+                challengesData[12].completed = true;
+                challengesData[12].isNew = true;
+                appState.points += challengesData[12].points;
+                showNotification(`🛏️ "${challengesData[12].title}" Sbloccato! +${challengesData[12].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Collezionista (id: 16, index 13) - 5+ varietà diverse
+            const uniqueTypes = [...new Set(appState.beers.map(b => b.type))];
+            if (uniqueTypes.length >= 5 && !challengesData[13].completed) {
+                challengesData[13].completed = true;
+                challengesData[13].isNew = true;
+                appState.points += challengesData[13].points;
+                showNotification(`🍷 "${challengesData[13].title}" Sbloccato! ${uniqueTypes.length} varietà! +${challengesData[13].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Un Bicchiere di Troppo (id: 17, index 14) - 2+ birre per tappa
+            if (appState.currentLocation === 5 &&
+                appState.beersPerLocation.every(count => count >= 2) &&
+                !challengesData[14].completed) {
+                challengesData[14].completed = true;
+                challengesData[14].isNew = true;
+                appState.points += challengesData[14].points;
+                showNotification(`🍻 "${challengesData[14].title}" Sbloccato! +${challengesData[14].points} punti`);
+                unlocked = true;
+            }
+
+            // AUTO: Too Old to Die Young (id: 18, index 15) - Solo per "Prosciutto"
+            if (appState.user && appState.user.name &&
+                appState.user.name.toLowerCase().trim() === 'prosciutto' &&
+                !challengesData[15].completed) {
+                challengesData[15].completed = true;
+                challengesData[15].isNew = true;
+                appState.points += challengesData[15].points;
+                showNotification(`🎂 "${challengesData[15].title}" Sbloccato! Happy Birthday Prosciutto! +${challengesData[15].points} punti`);
+                unlocked = true;
+            }
+
+            if (unlocked) {
+                loadChallenges();
+                updateRecordPoints();
+                updateChallengesBadge(); // Update notification badge
+                saveState();
+            }
+        }
+
+        function updateRecordPoints() {
+            // Update points in scoreboard if element exists
+            const pointsElements = document.querySelectorAll('[id*="points"], [id*="Points"]');
+            pointsElements.forEach(el => {
+                if (el.textContent !== undefined) {
+                    el.textContent = appState.points;
+                }
+            });
+        }
+
+        function updateChallengesBadge() {
+            console.log('=== updateChallengesBadge called ===');
+
+            // Find the challenges tab button in the navigation bar
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            let challengesTab = null;
+
+            tabButtons.forEach(btn => {
+                if (btn.onclick && btn.onclick.toString().includes('challenges')) {
+                    challengesTab = btn;
+                }
+            });
+
+            console.log('Challenges tab found:', challengesTab);
+
+            if (!challengesTab) {
+                console.log('ERROR: Challenges tab button not found!');
+                return;
+            }
+
+            // Find the trophy icon inside the challenges tab
+            const trophyIcon = challengesTab.querySelector('.icon i');
+            console.log('Trophy icon found:', trophyIcon);
+
+            // Count NEW challenges (not visited yet)
+            const newChallengesCount = challengesData.filter(c => c.completed && c.isNew).length;
+            const totalCompleted = challengesData.filter(c => c.completed).length;
+
+            console.log(`New challenges: ${newChallengesCount}, Total completed: ${totalCompleted}, hasVisitedChallenges: ${hasVisitedChallenges}`);
+
+            if (newChallengesCount > 0 && !hasVisitedChallenges) {
+                // Make the trophy icon RED using INLINE STYLE (massima priorità)
+                console.log('ATTEMPTING TO MAKE TROPHY RED - INLINE STYLE');
+                if (trophyIcon) {
+                    // Forza stile inline con setAttribute - MASSIMA PRIORITÀ
+                    trophyIcon.setAttribute('style', 'color: #FF0000 !important; filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 0, 0, 1)) !important;');
+                    trophyIcon.classList.add('trophy-has-new-challenges');
+                    console.log(`✅ Trophy icon RED FORCED - ${newChallengesCount} new challenges`);
+                    console.log('Inline style:', trophyIcon.getAttribute('style'));
+                } else {
+                    console.log('ERROR: Trophy icon is null!');
+                }
+            } else {
+                // Reset trophy icon to normal (yellow when active, gray when not)
+                console.log('Resetting trophy to normal color - REMOVING STYLE');
+                if (trophyIcon) {
+                    trophyIcon.removeAttribute('style');
+                    trophyIcon.classList.remove('trophy-has-new-challenges');
+                }
+            }
+        }
+
+        // Photo Gallery System
+        function initPhotoGallery() {
+            const grid = document.getElementById('photoGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            // Create 9 photo slots
+            for (let i = 0; i < 9; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'photo-slot';
+                slot.id = `photo-slot-${i}`;
+
+                if (appState.photos[i]) {
+                    slot.innerHTML = `<img src="${appState.photos[i]}" alt="Photo ${i + 1}">`;
+                } else {
+                    slot.innerHTML = '<div class="add-photo"><i class="fas fa-camera"></i></div>';
+                }
+
+                slot.onclick = () => {
+                    if (!appState.photos[i]) {
+                        document.getElementById('photoCameraInput').click();
+                        window.currentPhotoSlot = i;
+                    }
+                };
+
+                grid.appendChild(slot);
+            }
+
+            // Setup photo input handlers for both camera and gallery
+            const photoCameraInput = document.getElementById('photoCameraInput');
+            const photoGalleryInput = document.getElementById('photoGalleryInput');
+
+            if (photoCameraInput && !photoCameraInput.hasEventListener) {
+                photoCameraInput.addEventListener('change', handlePhotoUpload);
+                photoCameraInput.hasEventListener = true;
+            }
+
+            if (photoGalleryInput && !photoGalleryInput.hasEventListener) {
+                photoGalleryInput.addEventListener('change', handlePhotoUpload);
+                photoGalleryInput.hasEventListener = true;
+            }
+        }
+
+        function handlePhotoUpload(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            Array.from(files).forEach((file, index) => {
+                if (appState.photos.length < 9) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const slotIndex = appState.photos.length;
+                        appState.photos.push(e.target.result);
+                        initPhotoGallery();
+                        checkChallenges();
+                        saveState();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    showNotification('📸 Limite massimo di 9 foto raggiunto!');
+                }
+            });
+
+            // Reset input
+            event.target.value = '';
+        }
+
+        // Notifications
+        let notificationTimeout;
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            if (!notification) return;
+
+            if (notificationTimeout) {
+                clearTimeout(notificationTimeout);
+            }
+
+            notification.textContent = message;
+            notification.classList.add('show');
+
+            notificationTimeout = setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize on Load
+        window.onload = function() {
+            // Initialize avatar grid
+            initAvatarGrid();
+            
+            // Check if user exists
+            try {
+                const savedUser = localStorage.getItem('beerTourUser');
+                const savedProfile = localStorage.getItem('beerTourProfile');
+                const savedState = localStorage.getItem('beerTourState');
+                
+                if (savedUser) {
+                    const user = JSON.parse(savedUser);
+                    appState.user = user;
+                    
+                    // Load profile data
+                    if (savedProfile) {
+                        const profile = JSON.parse(savedProfile);
+                        appState.weight = profile.weight || 70;
+                        appState.height = profile.height || 175;
+                        appState.gender = profile.gender || 'male';
+                    }
+                    
+                    if (savedState) {
+                        const state = JSON.parse(savedState);
+                        // Merge state carefully, preserving profile data
+                        appState = {
+                            ...appState,
+                            ...state,
+                            user: appState.user,
+                            weight: appState.weight,
+                            height: appState.height,
+                            gender: appState.gender
+                        };
+
+                        // Restore challenges completed status
+                        if (appState.challenges && Array.isArray(appState.challenges)) {
+                            appState.challenges.forEach(savedChallenge => {
+                                const challenge = challengesData.find(c => c.id === savedChallenge.id);
+                                if (challenge) {
+                                    challenge.completed = savedChallenge.completed;
+                                }
+                            });
+                        }
+                    }
+
+                    document.getElementById('welcomeScreen').classList.add('hidden');
+                    document.getElementById('userNameDisplay').textContent = user.name;
+                    document.getElementById('userAvatar').innerHTML = user.avatar;
+                    
+                    // Initialize UI
+                    initializeStops();
+                    updateBeerStats();
+                    updateBeerList();
+                    updateThermometer();
+                    updateStopsProgress();
+                    updateSelectedStop(appState.currentLocation || 0);
+                    loadChallenges();
+                    initPhotoGallery();
+                }
+            } catch(e) {
+                console.log('Could not load saved state');
+            }
+
+            // Always initialize challenges and photos (even for new users)
+            if (!document.getElementById('challengesList').hasChildNodes()) {
+                loadChallenges();
+                initPhotoGallery();
+            }
+        };
+
+        // ========================================
+        // GOOGLE SHEETS INTEGRATION
+        // ========================================
+
+        // ⚠️ IMPORTANTE: Sostituisci questo URL con il tuo Google Apps Script URL
+        // Dopo aver deployato lo script, incolla l'URL qui:
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw93CHhCGB2PCtW4RVE6czi3lzr9fO0csM8UfJc_wJQwZAFI3k895Ci-_ABkEjGtvbQaA/exec";
+
+        let syncInterval = null;
+        let sharedPhotos = []; // Foto condivise da tutti gli utenti
+        let leaderboardData = []; // Dati classifica
+
+        // Sync manuale (bottone Sync)
+        async function syncWithSheet() {
+            if (GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbw93CHhCGB2PCtW4RVE6czi3lzr9fO0csM8UfJc_wJQwZAFI3k895Ci-_ABkEjGtvbQaA/exec") {
+                showNotification('⚠️ Configura prima il Google Script URL!');
+                return;
+            }
+
+            showNotification('🔄 Sincronizzazione in corso...');
+
+            try {
+                // Upload user data
+                await uploadUserData();
+
+                // Download leaderboard
+                await downloadLeaderboard();
+
+                // Download shared photos
+                await downloadSharedPhotos();
+
+                showNotification('✅ Sincronizzato con successo!');
+            } catch (error) {
+                console.error('Sync error:', error);
+                showNotification('❌ Errore sincronizzazione');
+            }
+        }
+
+        // Upload user data to Google Sheets
+        async function uploadUserData() {
+            const userData = {
+                action: "sync",
+                user_name: appState.user.name,
+                beers_count: appState.beers.length,
+                bac: calculateBAC(),
+                current_location: locations[appState.currentLocation]?.name || "Unknown",
+                points: appState.points,
+                achievements: challengesData.filter(c => c.completed).map(c => c.id),
+                lat: locations[appState.currentLocation]?.lat || 0,
+                lng: locations[appState.currentLocation]?.lng || 0
+            };
+
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData)
+            });
+
+            return response;
+        }
+
+        // Download leaderboard from Google Sheets
+        async function downloadLeaderboard() {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                leaderboardData = result.data;
+                updateLeaderboardUI();
+            }
+        }
+
+        // Update leaderboard UI
+        function updateLeaderboardUI() {
+            // Sort by points
+            const sorted = leaderboardData.sort((a, b) => b.points - a.points);
+
+            // Update scoreboard tab with live data
+            const scoreboardTab = document.getElementById('scoreboard-tab');
+            if (!scoreboardTab) return;
+
+            let html = `
+                <div style="padding: 20px;">
+                    <h2 style="text-align: center; color: #2C2C2C; margin-bottom: 20px;">
+                        <i class="fas fa-trophy" style="color: #FDB927;"></i> Classifica Live
+                    </h2>
+            `;
+
+            sorted.forEach((user, index) => {
+                const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+                const isCurrentUser = user.user_name === appState.user.name;
+
+                html += `
+                    <div style="
+                        background: ${isCurrentUser ? 'linear-gradient(135deg, #FDB927 0%, #F4A300 100%)' : 'white'};
+                        padding: 15px;
+                        margin-bottom: 10px;
+                        border-radius: 15px;
+                        border: 3px solid #2C2C2C;
+                        ${isCurrentUser ? 'box-shadow: 0 6px 20px rgba(253, 185, 39, 0.4);' : ''}
+                    ">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 20px; font-weight: 900; color: ${isCurrentUser ? '#2C2C2C' : '#333'};">
+                                    ${medal} ${user.user_name}
+                                </div>
+                                <div style="font-size: 14px; color: ${isCurrentUser ? '#2C2C2C' : '#666'}; margin-top: 5px;">
+                                    🍺 ${user.beers_count} birre | 💛 ${parseFloat(user.bac).toFixed(2)}‰ | 📍 ${user.current_location}
+                                </div>
+                            </div>
+                            <div style="font-size: 24px; font-weight: 900; color: ${isCurrentUser ? '#2C2C2C' : '#FDB927'};">
+                                ${user.points}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Add timestamp
+            html += `
+                    <div style="text-align: center; margin-top: 20px; color: #666; font-size: 13px;">
+                        ⏱️ Ultimo aggiornamento: ${new Date().toLocaleTimeString('it-IT')}
+                    </div>
+                </div>
+            `;
+
+            scoreboardTab.innerHTML = html;
+        }
+
+        // Upload photo to Google Sheets
+        async function uploadPhotoToSheet(photoData) {
+            const data = {
+                action: "uploadPhoto",
+                user_name: appState.user.name,
+                photo_data: photoData,
+                location: locations[appState.currentLocation]?.name || "Unknown"
+            };
+
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+        }
+
+        // Download shared photos from Google Sheets
+        async function downloadSharedPhotos() {
+            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPhotos`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                sharedPhotos = result.data;
+                updateSharedPhotoGallery();
+            }
+        }
+
+        // Update shared photo gallery UI
+        function updateSharedPhotoGallery() {
+            const grid = document.getElementById('photoGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            // Show last 50 photos (limit for performance)
+            const photosToShow = sharedPhotos.slice(-50);
+
+            photosToShow.forEach((photo) => {
+                const slot = document.createElement('div');
+                slot.className = 'photo-slot';
+                slot.style.position = 'relative';
+
+                slot.innerHTML = `
+                    <img src="${photo.photo_data}" alt="Photo" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div style="
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+                        color: white;
+                        padding: 5px;
+                        font-size: 11px;
+                        font-weight: 600;
+                    ">
+                        ${photo.user_name}
+                    </div>
+                `;
+
+                grid.appendChild(slot);
+            });
+
+            // Add upload button at the end
+            const uploadSlot = document.createElement('div');
+            uploadSlot.className = 'photo-slot';
+            uploadSlot.style.cursor = 'pointer';
+            uploadSlot.onclick = () => document.getElementById('photoInput').click();
+            uploadSlot.innerHTML = '<div class="add-photo"><i class="fas fa-camera"></i></div>';
+            grid.appendChild(uploadSlot);
+        }
+
+        // Modified handlePhotoUpload to also upload to Google Sheets
+        const originalHandlePhotoUpload = handlePhotoUpload;
+        handlePhotoUpload = function(event) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            Array.from(files).forEach((file) => {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const photoData = e.target.result;
+
+                    // Save locally
+                    appState.photos.push(photoData);
+
+                    // Upload to Google Sheets (if configured)
+                    if (GOOGLE_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbw93CHhCGB2PCtW4RVE6czi3lzr9fO0csM8UfJc_wJQwZAFI3k895Ci-_ABkEjGtvbQaA/exec") {
+                        try {
+                            await uploadPhotoToSheet(photoData);
+                            await downloadSharedPhotos(); // Refresh gallery
+                            checkChallenges();
+                        } catch (error) {
+                            console.error('Photo upload error:', error);
+                        }
+                    } else {
+                        // Fallback to local gallery only
+                        initPhotoGallery();
+                        checkChallenges();
+                    }
+
+                    saveState();
+                };
+                reader.readAsDataURL(file);
+            });
+
+            event.target.value = '';
+        };
+
+        // Auto-sync every 30 seconds
+        function startAutoSync() {
+            if (GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbw93CHhCGB2PCtW4RVE6czi3lzr9fO0csM8UfJc_wJQwZAFI3k895Ci-_ABkEjGtvbQaA/exec") {
+                console.log('Google Script URL not configured. Auto-sync disabled.');
+                return;
+            }
+
+            // Clear existing interval
+            if (syncInterval) {
+                clearInterval(syncInterval);
+            }
+
+            // Sync every 30 seconds
+            syncInterval = setInterval(async () => {
+                try {
+                    await uploadUserData();
+                    await downloadLeaderboard();
+                    await downloadSharedPhotos();
+                    console.log('Auto-sync completed');
+                } catch (error) {
+                    console.error('Auto-sync error:', error);
+                }
+            }, 30000); // 30 seconds
+
+            // Initial sync
+            syncWithSheet();
+        }
+
+        // Start auto-sync when app loads (add to window.onload)
+        const originalOnload = window.onload;
+        window.onload = function() {
+            if (originalOnload) originalOnload();
+
+            // Start auto-sync after 5 seconds
+            setTimeout(() => {
+                startAutoSync();
+            }, 5000);
+        };
+
+    </script>
+</body>
+</html>
