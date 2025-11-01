@@ -405,7 +405,7 @@
             display: none;
             padding: 20px;
             padding-top: 90px; /* Space for fixed header to prevent content overlap */
-            padding-bottom: 100px; /* Space for footer to prevent content being covered */
+            padding-bottom: 120px; /* Space for footer to prevent content being covered */
             animation: fadeIn 0.3s;
         }
 
@@ -1985,80 +1985,74 @@
             // 5. Partenza Ribaltante
             { id: 5, icon: "fa-bolt", title: "Partenza Ribaltante", description: "Prima birra con gradazione ≥7%", points: 15, completed: false, autoUnlock: true },
 
-            // 6. Una Strada in Salita
-            { id: 6, icon: "fa-chart-line", title: "Una Strada in Salita", description: "Gradazione media aumenta ad ogni tappa", points: 25, completed: false, autoUnlock: true },
+            // 6. Etilista
+            { id: 6, icon: "fa-glass-water", title: "Etilista", description: "BAC ≥0.75‰ entro la 2° tappa", points: 15, completed: false, autoUnlock: true },
 
-            // 7. Montagne Russe
-            { id: 7, icon: "fa-wave-square", title: "Montagne Russe", description: "Gradazione alterna su/giù per 3 tappe", points: 35, completed: false, autoUnlock: true },
+            // 7. Etilista Pro
+            { id: 7, icon: "fa-fire", title: "Etilista Pro", description: "BAC ≥1.5‰ entro la 3° tappa", points: 50, completed: false, autoUnlock: true },
 
-            // 8. Etilista
-            { id: 8, icon: "fa-glass-water", title: "Etilista", description: "BAC ≥0.75‰ entro la 2° tappa", points: 15, completed: false, autoUnlock: true },
+            // 8. Etilista Supremo
+            { id: 8, icon: "fa-skull-crossbones", title: "Etilista Supremo", description: "BAC ≥2.5‰ entro la 5° tappa", points: 100, completed: false, autoUnlock: true },
 
-            // 9. Etilista Pro
-            { id: 9, icon: "fa-fire", title: "Etilista Pro", description: "BAC ≥1.5‰ entro la 3° tappa", points: 50, completed: false, autoUnlock: true },
+            // 9. Collezionista
+            { id: 9, icon: "fa-wine-bottle", title: "Collezionista", description: "Prova almeno 5 varietà diverse di birra", points: 30, completed: false, autoUnlock: true },
 
-            // 10. Etilista Supremo
-            { id: 10, icon: "fa-skull-crossbones", title: "Etilista Supremo", description: "BAC ≥2.5‰ entro la 5° tappa", points: 100, completed: false, autoUnlock: true },
+            // 10. Un Bicchiere di Troppo
+            { id: 10, icon: "fa-champagne-glasses", title: "Un Bicchiere di Troppo", description: "Almeno 2 birre in ogni tappa", points: 35, completed: false, autoUnlock: true },
 
-            // 11. Collezionista
-            { id: 11, icon: "fa-wine-bottle", title: "Collezionista", description: "Prova almeno 5 varietà diverse di birra", points: 30, completed: false, autoUnlock: true },
+            // 11. Specialista
+            { id: 11, icon: "fa-star", title: "Specialista", description: "Prova la specialità di ogni birreria", points: 20, completed: false },
 
-            // 12. Un Bicchiere di Troppo
-            { id: 12, icon: "fa-champagne-glasses", title: "Un Bicchiere di Troppo", description: "Almeno 2 birre in ogni tappa", points: 35, completed: false, autoUnlock: true },
+            // 12. Normalone
+            { id: 12, icon: "fa-mug-saucer", title: "Normalone", description: "Bevi solo birre medie bionde", points: 5, completed: false, autoUnlock: true },
 
-            // 13. Specialista
-            { id: 13, icon: "fa-star", title: "Specialista", description: "Prova la specialità di ogni birreria", points: 20, completed: false },
+            // 13. Passeggiata Pensionante
+            { id: 13, icon: "fa-person-walking", title: "Passeggiata Pensionante", description: "BAC <0.9‰ nelle prime 4 tappe", points: -10, completed: false, autoUnlock: true },
 
-            // 14. Normalone
-            { id: 14, icon: "fa-mug-saucer", title: "Normalone", description: "Bevi solo birre medie bionde", points: 5, completed: false, autoUnlock: true },
+            // 14. Pensione Completa
+            { id: 14, icon: "fa-bed", title: "Pensione Completa", description: "BAC <1.75‰ per tutto il tour", points: -50, completed: false, autoUnlock: true },
 
-            // 15. Passeggiata Pensionante
-            { id: 15, icon: "fa-person-walking", title: "Passeggiata Pensionante", description: "BAC <0.9‰ nelle prime 4 tappe", points: -10, completed: false, autoUnlock: true },
+            // 15. Esploratore
+            { id: 15, icon: "fa-toilet", title: "Esploratore", description: "Visita i bagni di tutte le birrerie", points: 10, completed: false },
 
-            // 16. Pensione Completa
-            { id: 16, icon: "fa-bed", title: "Pensione Completa", description: "BAC <1.75‰ per tutto il tour", points: -50, completed: false, autoUnlock: true },
+            // 16. Lupin
+            { id: 16, icon: "fa-mask", title: "Lupin", description: "Ruba un bicchiere in una birreria", points: 50, completed: false },
 
-            // 17. Esploratore
-            { id: 17, icon: "fa-toilet", title: "Esploratore", description: "Visita i bagni di tutte le birrerie", points: 10, completed: false },
+            // 17. Luminare
+            { id: 17, icon: "fa-star-of-david", title: "Luminare", description: "Convinci una ProPal che Israele 'ha fatto bene'", points: 35, completed: false },
 
-            // 18. Lupin
-            { id: 18, icon: "fa-mask", title: "Lupin", description: "Ruba un bicchiere in una birreria", points: 50, completed: false },
+            // 18. Supporter
+            { id: 18, icon: "fa-handshake", title: "Supporter", description: "Presenta una Simmenthal a Lillo", points: 35, completed: false },
 
-            // 19. Luminare
-            { id: 19, icon: "fa-star-of-david", title: "Luminare", description: "Convinci una ProPal che Israele 'ha fatto bene'", points: 35, completed: false },
+            // 19. Nostalgico
+            { id: 19, icon: "fa-music", title: "Nostalgico", description: "Canta 'Faccetta Nera' o 'Giovinezza'", points: 35, completed: false },
 
-            // 20. Supporter
-            { id: 20, icon: "fa-handshake", title: "Supporter", description: "Presenta una Simmenthal a Lillo", points: 35, completed: false },
+            // 20. Casa Pound
+            { id: 20, icon: "fa-hand", title: "Casa Pound", description: "Fai il saluto romano", points: 15, completed: false },
 
-            // 21. Nostalgico
-            { id: 21, icon: "fa-music", title: "Nostalgico", description: "Canta 'Faccetta Nera' o 'Giovinezza'", points: 35, completed: false },
+            // 21. Baffino
+            { id: 21, icon: "fa-book", title: "Baffino", description: "Leggi Mein Kampf su uno sgabello", points: 180, completed: false },
 
-            // 22. Casa Pound
-            { id: 22, icon: "fa-hand", title: "Casa Pound", description: "Fai il saluto romano", points: 15, completed: false },
+            // 22. Scroccone
+            { id: 22, icon: "fa-cookie-bite", title: "Scroccone", description: "Chiedi un drummino ad una comunistaccia", points: 10, completed: false },
 
-            // 23. Baffino
-            { id: 23, icon: "fa-book", title: "Baffino", description: "Leggi Mein Kampf su uno sgabello", points: 180, completed: false },
+            // 23. Scroccone Incallito
+            { id: 23, icon: "fa-cookie", title: "Scroccone Incallito", description: "Chiedi 3 drummini a tre comunistacce", points: 20, completed: false },
 
-            // 24. Scroccone
-            { id: 24, icon: "fa-cookie-bite", title: "Scroccone", description: "Chiedi un drummino ad una comunistaccia", points: 10, completed: false },
+            // 24. Scroccone Spudorato
+            { id: 24, icon: "fa-crown", title: "Scroccone Spudorato", description: "Chiedi 5 drummini alla stessa comunistaccia", points: 30, completed: false },
 
-            // 25. Scroccone Incallito
-            { id: 25, icon: "fa-cookie", title: "Scroccone Incallito", description: "Chiedi 3 drummini a tre comunistacce", points: 20, completed: false },
+            // 25. Insaziabile
+            { id: 25, icon: "fa-smoking", title: "Insaziabile", description: "Fuma iQos mentre fumi Paglione", points: 15, completed: false },
 
-            // 26. Scroccone Spudorato
-            { id: 26, icon: "fa-crown", title: "Scroccone Spudorato", description: "Chiedi 5 drummini alla stessa comunistaccia", points: 30, completed: false },
+            // 26. Molestatore
+            { id: 26, icon: "fa-heart", title: "Molestatore", description: "Provaci con una cameriera", points: 25, completed: false },
 
-            // 27. Insaziabile
-            { id: 27, icon: "fa-smoking", title: "Insaziabile", description: "Fuma iQos mentre fumi Paglione", points: 15, completed: false },
+            // 27. Molestatore Seriale
+            { id: 27, icon: "fa-heart-broken", title: "Molestatore Seriale", description: "Provaci con ogni cameriera", points: 50, completed: false },
 
-            // 28. Molestatore
-            { id: 28, icon: "fa-heart", title: "Molestatore", description: "Provaci con una cameriera", points: 25, completed: false },
-
-            // 29. Molestatore Seriale
-            { id: 29, icon: "fa-heart-broken", title: "Molestatore Seriale", description: "Provaci con ogni cameriera", points: 50, completed: false },
-
-            // 30. Leso
-            { id: 30, icon: "fa-face-dizzy", title: "Leso", description: "Fai almeno una volta il leso", points: -50, completed: false }
+            // 28. Leso
+            { id: 28, icon: "fa-face-dizzy", title: "Leso", description: "Fai almeno una volta il leso", points: -50, completed: false }
         ];
 
         // Locations Data with coordinates
@@ -2570,26 +2564,17 @@
             document.getElementById('homeBAC').textContent = bac.toFixed(2) + '‰';
 
             // Calculate percentage (0-100%)
-            // Max display at 6.0‰ - everything above is pinned to 100%
-            // Con 6.0‰ il termometro regge molte più birre (10-15 birre medie)
-            const maxBAC = 6.0;
+            // Max display at 3.0‰ - everything above is pinned to 100%
+            const maxBAC = 3.0;
             const percentage = Math.min(100, (bac / maxBAC) * 100);
-
-            console.log(`🔄 UpdateThermometer: BAC=${bac.toFixed(2)}‰, percentage=${percentage.toFixed(1)}%`);
 
             // Update BEER LIQUID width (fills from left to right)
             const liquidElement = document.getElementById('beerLiquid');
             if (liquidElement) {
-                // IMPORTANTE: Usa requestAnimationFrame per forzare il re-render
-                // anche quando l'elemento è nascosto (in una tab non attiva)
                 requestAnimationFrame(() => {
-                    // Force reflow to ensure DOM is ready
                     void liquidElement.offsetWidth;
                     liquidElement.style.width = `${percentage}%`;
-                    console.log(`✅ Liquid updated to ${percentage}%`);
                 });
-            } else {
-                console.error('❌ beerLiquid element not found!');
             }
 
             // Update pointer position (follows the beer level at right edge)
@@ -2631,14 +2616,11 @@
                         );
 
                         pointerElement.style.height = `${pointerHeight}px`;
-                        console.log(`✅ Pointer updated: left=${pointerPos.toFixed(1)}px, height=${pointerHeight.toFixed(1)}px`);
                     });
                 } else {
                     // Hide pointer when no beer
                     pointerElement.classList.remove('visible');
                 }
-            } else {
-                console.error('❌ thermometerPointer element not found!');
             }
 
             // Update face icon based on BAC with MORE gradations
@@ -2738,16 +2720,7 @@
             
             // The correct formula
             const bac = (totalAlcoholGrams / (bodyWeightGrams * r)) * 1000;
-            
-            console.log('Debug BAC calculation:', {
-                beers: appState.beers.length,
-                totalAlcoholGrams: totalAlcoholGrams.toFixed(2),
-                weight: appState.weight,
-                gender: appState.gender,
-                r: r,
-                bac: bac.toFixed(2)
-            });
-            
+
             return Math.max(0, bac);
         }
 
@@ -2935,7 +2908,8 @@
             // 4. Partenza Rinfrescante (index 3) - Prima birra bionda o weiss
             if (appState.beers.length >= 1 && !challengesData[3].completed) {
                 const firstBeer = appState.beers[0];
-                if (firstBeer.type === 'bionda' || firstBeer.type === 'weiss') {
+                const beerType = firstBeer.type.toLowerCase();
+                if (beerType === 'bionda' || beerType === 'weiss') {
                     unlockChallenge(3, '❄️');
                 }
             }
@@ -2948,126 +2922,51 @@
                 }
             }
 
-            // 6. Una Strada in Salita (index 5) - Gradazione media aumenta ogni tappa
-            if (appState.currentLocation === 5 && !challengesData[5].completed) {
-                // Calcola gradazione media per ogni tappa
-                const avgPerLocation = [];
-                for (let i = 0; i < 6; i++) {
-                    const beersAtLocation = appState.beers.filter((b, idx) => {
-                        return appState.beersPerLocation.slice(0, i).reduce((a, c) => a + c, 0) <= idx &&
-                               idx < appState.beersPerLocation.slice(0, i + 1).reduce((a, c) => a + c, 0);
-                    });
-                    if (beersAtLocation.length > 0) {
-                        const avg = beersAtLocation.reduce((sum, b) => sum + b.alcohol, 0) / beersAtLocation.length;
-                        avgPerLocation.push(avg);
-                    }
-                }
-
-                // Verifica: prima e ultima tappa strettamente maggiore, altre >=
-                let valid = true;
-                for (let i = 1; i < avgPerLocation.length; i++) {
-                    if (i === 1 || i === avgPerLocation.length - 1) {
-                        // Prima e ultima: strettamente maggiore
-                        if (avgPerLocation[i] <= avgPerLocation[i - 1]) {
-                            valid = false;
-                            break;
-                        }
-                    } else {
-                        // Altre: maggiore o uguale
-                        if (avgPerLocation[i] < avgPerLocation[i - 1]) {
-                            valid = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (valid && avgPerLocation.length === 6) {
-                    unlockChallenge(5, '📈');
-                }
-            }
-
-            // 7. Montagne Russe (index 6) - Alterna su/giù per 3 transizioni (anche non consecutive)
-            if (appState.currentLocation >= 3 && !challengesData[6].completed) {
-                const avgPerLocation = [];
-                for (let i = 0; i <= appState.currentLocation; i++) {
-                    const beersAtLocation = appState.beers.filter((b, idx) => {
-                        return appState.beersPerLocation.slice(0, i).reduce((a, c) => a + c, 0) <= idx &&
-                               idx < appState.beersPerLocation.slice(0, i + 1).reduce((a, c) => a + c, 0);
-                    });
-                    if (beersAtLocation.length > 0) {
-                        const avg = beersAtLocation.reduce((sum, b) => sum + b.alcohol, 0) / beersAtLocation.length;
-                        avgPerLocation.push(avg);
-                    }
-                }
-
-                // Trova transizioni (su/giù)
-                const transitions = [];
-                for (let i = 1; i < avgPerLocation.length; i++) {
-                    if (avgPerLocation[i] > avgPerLocation[i - 1]) {
-                        transitions.push('up');
-                    } else if (avgPerLocation[i] < avgPerLocation[i - 1]) {
-                        transitions.push('down');
-                    }
-                }
-
-                // Conta alternanze (anche non consecutive)
-                let alternations = 0;
-                for (let i = 1; i < transitions.length; i++) {
-                    if (transitions[i] !== transitions[i - 1]) {
-                        alternations++;
-                    }
-                }
-
-                if (alternations >= 3) {
-                    unlockChallenge(6, '🎢');
-                }
-            }
-
-            // 8. Etilista (index 7) - BAC >=0.75‰ entro 2° tappa
+            // 6. Etilista (index 5) - BAC >=0.75‰ entro 2° tappa
             if (bac >= 0.75 && appState.currentLocation <= 1) {
-                unlockChallenge(7, '🍺');
+                unlockChallenge(5, '🍺');
             }
 
-            // 9. Etilista Pro (index 8) - BAC >=1.5‰ entro 3° tappa
+            // 7. Etilista Pro (index 6) - BAC >=1.5‰ entro 3° tappa
             if (bac >= 1.5 && appState.currentLocation <= 2) {
-                unlockChallenge(8, '🔥');
+                unlockChallenge(6, '🔥');
             }
 
-            // 10. Etilista Supremo (index 9) - BAC >=2.5‰ entro 5° tappa
+            // 8. Etilista Supremo (index 7) - BAC >=2.5‰ entro 5° tappa
             if (bac >= 2.5 && appState.currentLocation <= 4) {
-                unlockChallenge(9, '💀');
+                unlockChallenge(7, '💀');
             }
 
-            // 11. Collezionista (index 10) - 5+ varietà diverse
+            // 9. Collezionista (index 8) - 5+ varietà diverse
             const uniqueTypes = [...new Set(appState.beers.map(b => b.type))];
             if (uniqueTypes.length >= 5) {
-                unlockChallenge(10, '🍷');
+                unlockChallenge(8, '🍷');
             }
 
-            // 12. Un Bicchiere di Troppo (index 11) - 2+ birre per tappa
+            // 10. Un Bicchiere di Troppo (index 9) - 2+ birre per tappa
             if (appState.currentLocation === 5 &&
                 appState.beersPerLocation.every(count => count >= 2)) {
-                unlockChallenge(11, '🍻');
+                unlockChallenge(9, '🍻');
             }
 
-            // 14. Normalone (index 13) - Solo birre medie bionde
-            if (appState.beers.length > 0 && !challengesData[13].completed) {
+            // 12. Normalone (index 11) - Solo birre medie bionde
+            if (appState.currentLocation === 5 && appState.beers.length > 0 && !challengesData[11].completed) {
                 const allNormalone = appState.beers.every(b =>
-                    b.size === 'media' && b.type === 'bionda'
+                    b.size === 'media' && b.type.toLowerCase() === 'bionda'
                 );
                 if (allNormalone) {
-                    unlockChallenge(13, '☕');
+                    unlockChallenge(11, '☕');
                 }
             }
 
-            // 15. Passeggiata Pensionante (index 14) - BAC <0.9‰ nelle prime 4 tappe
+            // 13. Passeggiata Pensionante (index 12) - BAC <0.9‰ nelle prime 4 tappe
             if (appState.currentLocation >= 3 && bac < 0.9) {
-                unlockChallenge(14, '🚶');
+                unlockChallenge(12, '🚶');
             }
 
-            // 16. Pensione Completa (index 15) - BAC <1.75‰ per tutto il tour
+            // 14. Pensione Completa (index 13) - BAC <1.75‰ per tutto il tour
             if (appState.currentLocation === 5 && bac < 1.75) {
-                unlockChallenge(15, '🛏️');
+                unlockChallenge(13, '🛏️');
             }
 
             if (unlocked) {
@@ -3089,8 +2988,6 @@
         }
 
         function updateChallengesBadge() {
-            console.log('=== updateChallengesBadge called ===');
-
             // Find the challenges tab button in the navigation bar
             const tabButtons = document.querySelectorAll('.tab-btn');
             let challengesTab = null;
@@ -3101,38 +2998,22 @@
                 }
             });
 
-            console.log('Challenges tab found:', challengesTab);
-
-            if (!challengesTab) {
-                console.log('ERROR: Challenges tab button not found!');
-                return;
-            }
+            if (!challengesTab) return;
 
             // Find the trophy icon inside the challenges tab
             const trophyIcon = challengesTab.querySelector('.icon i');
-            console.log('Trophy icon found:', trophyIcon);
 
             // Count NEW challenges (not visited yet)
             const newChallengesCount = challengesData.filter(c => c.completed && c.isNew).length;
-            const totalCompleted = challengesData.filter(c => c.completed).length;
-
-            console.log(`New challenges: ${newChallengesCount}, Total completed: ${totalCompleted}, hasVisitedChallenges: ${hasVisitedChallenges}`);
 
             if (newChallengesCount > 0 && !hasVisitedChallenges) {
-                // Make the trophy icon RED using INLINE STYLE (massima priorità)
-                console.log('ATTEMPTING TO MAKE TROPHY RED - INLINE STYLE');
+                // Make the trophy icon RED using INLINE STYLE
                 if (trophyIcon) {
-                    // Forza stile inline con setAttribute - MASSIMA PRIORITÀ
                     trophyIcon.setAttribute('style', 'color: #FF0000 !important; filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 0, 0, 1)) !important;');
                     trophyIcon.classList.add('trophy-has-new-challenges');
-                    console.log(`✅ Trophy icon RED FORCED - ${newChallengesCount} new challenges`);
-                    console.log('Inline style:', trophyIcon.getAttribute('style'));
-                } else {
-                    console.log('ERROR: Trophy icon is null!');
                 }
             } else {
-                // Reset trophy icon to normal (yellow when active, gray when not)
-                console.log('Resetting trophy to normal color - REMOVING STYLE');
+                // Reset trophy icon to normal
                 if (trophyIcon) {
                     trophyIcon.removeAttribute('style');
                     trophyIcon.classList.remove('trophy-has-new-challenges');
@@ -3289,9 +3170,6 @@
                 // Download leaderboard
                 await downloadLeaderboard();
 
-                // Download shared photos
-                await downloadSharedPhotos();
-
                 // Nascondi overlay e mostra notifica successo
                 if (overlay) {
                     overlay.classList.remove('active');
@@ -3400,118 +3278,6 @@
 
             scoreboardTab.innerHTML = html;
         }
-
-        // Upload photo to Google Sheets
-        async function uploadPhotoToSheet(photoData) {
-            const data = {
-                action: "uploadPhoto",
-                user_name: appState.user.name,
-                photo_data: photoData,
-                location: locations[appState.currentLocation]?.name || "Unknown"
-            };
-
-            await fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
-        }
-
-        // Download shared photos from Google Sheets
-        async function downloadSharedPhotos() {
-            const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPhotos`);
-            const result = await response.json();
-
-            if (result.status === "success") {
-                sharedPhotos = result.data;
-                updateSharedPhotoGallery();
-            }
-        }
-
-        // Update shared photo gallery UI
-        function updateSharedPhotoGallery() {
-            const grid = document.getElementById('photoGrid');
-            if (!grid) return;
-
-            grid.innerHTML = '';
-
-            // Show last 50 photos (limit for performance)
-            const photosToShow = sharedPhotos.slice(-50);
-
-            photosToShow.forEach((photo) => {
-                const slot = document.createElement('div');
-                slot.className = 'photo-slot';
-                slot.style.position = 'relative';
-
-                slot.innerHTML = `
-                    <img src="${photo.photo_data}" alt="Photo" style="width: 100%; height: 100%; object-fit: cover;">
-                    <div style="
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        right: 0;
-                        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-                        color: white;
-                        padding: 5px;
-                        font-size: 11px;
-                        font-weight: 600;
-                    ">
-                        ${photo.user_name}
-                    </div>
-                `;
-
-                grid.appendChild(slot);
-            });
-
-            // Add upload button at the end
-            const uploadSlot = document.createElement('div');
-            uploadSlot.className = 'photo-slot';
-            uploadSlot.style.cursor = 'pointer';
-            uploadSlot.onclick = () => document.getElementById('photoInput').click();
-            uploadSlot.innerHTML = '<div class="add-photo"><i class="fas fa-camera"></i></div>';
-            grid.appendChild(uploadSlot);
-        }
-
-        // Modified handlePhotoUpload to also upload to Google Sheets
-        const originalHandlePhotoUpload = handlePhotoUpload;
-        handlePhotoUpload = function(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-
-            Array.from(files).forEach((file) => {
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    const photoData = e.target.result;
-
-                    // Save locally
-                    appState.photos.push(photoData);
-
-                    // Upload to Google Sheets (if configured)
-                    if (GOOGLE_SCRIPT_URL !== "YOUR_GOOGLE_SCRIPT_URL_HERE" && GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.trim() !== "") {
-                        try {
-                            await uploadPhotoToSheet(photoData);
-                            await downloadSharedPhotos(); // Refresh gallery
-                            checkChallenges();
-                        } catch (error) {
-                            console.error('Photo upload error:', error);
-                        }
-                    } else {
-                        // Fallback to local gallery only
-                        checkChallenges();
-                    }
-
-                    saveState();
-                };
-                reader.readAsDataURL(file);
-            });
-
-            event.target.value = '';
-        };
-
-
 
     </script>
 </body>
