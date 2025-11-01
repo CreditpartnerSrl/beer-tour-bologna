@@ -32,9 +32,11 @@
             font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #FDB927 0%, #F4A300 50%, #D4880F 100%);
             min-height: 100vh;
-            padding-bottom: 100px;
-            position: relative;
-            overflow-x: hidden;
+            height: 100vh; /* Fixed height to prevent overflow */
+            padding-bottom: 0;
+            position: fixed; /* Fixed to prevent scroll bounce */
+            width: 100%;
+            overflow: hidden; /* Hide overflow to prevent background showing */
             overscroll-behavior: none;
             -webkit-overflow-scrolling: touch;
         }
@@ -57,13 +59,14 @@
             max-width: 480px;
             margin: 0 auto;
             background: #FFFFFF;
-            min-height: 100vh;
+            height: 100vh; /* Fixed height instead of min-height */
             position: relative;
             box-shadow: 0 0 60px rgba(0,0,0,0.3);
             z-index: 1;
             overscroll-behavior: contain;
             overflow-y: auto;
             overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* Welcome Screen */
@@ -220,13 +223,17 @@
         .header {
             background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
             color: #2C2C2C;
-            padding: 18px 20px;
+            padding: 12px 15px; /* Reduced from 18px 20px for slimmer header */
             text-align: center;
-            position: sticky;
+            position: fixed; /* Changed from sticky to fixed */
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            z-index: 9999; /* Increased z-index to stay above everything */
             box-shadow: 0 4px 20px rgba(253, 185, 39, 0.3);
             border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+            max-width: 480px; /* Match container width */
+            margin: 0 auto; /* Center on large screens */
         }
 
         .header-content {
@@ -253,37 +260,47 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 5px; /* Reduced from 10px to bring elements closer */
+            font-size: 13px; /* Reduced from 18px to save space */
+            font-weight: 600; /* Slightly lighter */
         }
 
         .user-avatar {
-            font-size: 20px;
+            font-size: 18px; /* Reduced from 28px to save space */
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 18px; /* Slightly smaller for better proportion */
             margin: 0;
+            font-weight: 700;
         }
 
         .header .subtitle {
-            font-size: 12px;
-            opacity: 0.9;
+            font-size: 11px; /* Slightly smaller */
+            opacity: 0.85;
+            margin-top: 2px;
         }
 
         .share-btn {
             background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.4); /* Thicker border */
             color: white;
-            padding: 5px 10px;
+            padding: 6px 12px; /* Reduced for slimmer header */
             border-radius: 20px;
             cursor: pointer;
-            font-size: 12px;
-            transition: background 0.3s;
+            font-size: 13px; /* Reduced from 15px */
+            font-weight: 700; /* Bold */
+            transition: all 0.3s;
         }
 
         .share-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.35);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .share-btn:active {
+            transform: scale(0.95);
         }
 
         .tab-nav {
@@ -296,8 +313,9 @@
             transform: translateX(-50%);
             max-width: 480px;
             width: 100%;
-            z-index: 999;
+            z-index: 9998; /* Just below header */
             box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            border-top: 1px solid #e0e0e0; /* Extra visual anchor */
         }
 
         .tab-btn {
@@ -386,6 +404,8 @@
         .tab-content {
             display: none;
             padding: 20px;
+            padding-top: 90px; /* Space for fixed header to prevent content overlap */
+            padding-bottom: 100px; /* Space for footer to prevent content being covered */
             animation: fadeIn 0.3s;
         }
 
@@ -796,8 +816,8 @@
         .timeline-line {
             position: absolute;
             top: 25px;
-            left: 20px;
-            right: 20px;
+            left: 22.5px; /* Center of first circle (45px/2) */
+            right: 22.5px; /* Center of last circle */
             height: 2px;
             background: #e0e0e0;
             z-index: 1;
@@ -806,11 +826,12 @@
         .timeline-progress {
             position: absolute;
             top: 25px;
-            left: 20px;
+            left: 22.5px; /* Center of first circle */
             height: 2px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 2;
             transition: width 0.5s;
+            max-width: calc(100% - 45px); /* Ensure it doesn't go beyond last circle */
         }
 
         .stops-container {
@@ -964,6 +985,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-bottom: 20px;
+            margin-top: 10px; /* Add space below header to prevent overlap */
         }
 
         .stat-card {
@@ -1354,7 +1376,7 @@
         /* Notification */
         .notification {
             position: fixed;
-            top: 20px;
+            top: 80px; /* Below header (75px + margin) */
             left: 50%;
             transform: translateX(-50%);
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1362,9 +1384,12 @@
             padding: 15px 25px;
             border-radius: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1001;
+            z-index: 9997; /* Below header but above everything else */
             animation: slideDown 0.5s;
             display: none;
+            max-width: 90%;
+            text-align: center;
+            font-weight: 600;
         }
 
         @keyframes slideDown {
@@ -1540,85 +1565,13 @@
             box-shadow: 0 3px 8px rgba(253, 185, 39, 0.4);
         }
 
-        /* Photo Gallery - Beer Theme */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
 
-        .photo-slot {
-            aspect-ratio: 1;
-            background: linear-gradient(145deg, #F5F5F5, #E0E0E0);
-            border-radius: 15px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid #2C2C2C;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .photo-slot:hover {
-            transform: scale(1.05);
-            border-color: #FDB927;
-            box-shadow: 0 4px 15px rgba(253, 185, 39, 0.3);
-        }
-
-        .photo-slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .photo-slot .add-photo {
-            font-size: 32px;
-            opacity: 0.5;
-        }
-
-        .photo-slot .add-photo i {
-            color: #FDB927;
-        }
-
-        .upload-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #FDB927 0%, #F4A300 100%);
-            color: #2C2C2C;
-            border: 3px solid #2C2C2C;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 900;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 6px 18px rgba(253, 185, 39, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .upload-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(253, 185, 39, 0.4);
-        }
-
-        .upload-btn:active {
-            transform: scale(0.96);
-        }
 
         /* Mobile Responsive */
         @media (max-width: 480px) {
             .container {
                 max-width: 100%;
                 box-shadow: none;
-            }
-
-            .photo-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 8px;
             }
         }
 
@@ -1707,21 +1660,27 @@
             
             <div class="profile-setup">
                 <input type="text" id="userName" class="profile-input" placeholder="Il tuo nome..." maxlength="20">
-                
+
                 <div class="profile-row">
-                    <input type="number" id="userWeight" class="profile-input" placeholder="Peso (kg)" min="40" max="150" value="70">
-                    <input type="number" id="userHeight" class="profile-input" placeholder="Altezza (cm)" min="140" max="220" value="175">
+                    <input type="number" id="userWeight" class="profile-input" placeholder="Peso (kg)" min="40" max="150">
+                    <input type="number" id="userHeight" class="profile-input" placeholder="Altezza (cm)" min="140" max="220">
                 </div>
-                
+
                 <select id="userGender" class="profile-select">
                     <option value="male">🚹 Uomo</option>
                     <option value="female">🚺 Donna</option>
                 </select>
-                
+
+                <!-- Departure Time Picker -->
+                <div style="margin: 15px 0;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 700; font-size: 14px;">⏰ Orario di Partenza</label>
+                    <input type="time" id="departureTime" class="profile-input" value="16:00" style="font-size: 18px; text-align: center; font-weight: 700;">
+                </div>
+
                 <div class="profile-avatars" id="avatarGrid">
                     <!-- Avatars will be generated -->
                 </div>
-                
+
                 <button class="start-button" onclick="startApp()">🎉 Inizia il Tour!</button>
             </div>
         </div>
@@ -1738,16 +1697,16 @@
                     <div class="user-info" style="cursor: pointer;" onclick="openSettings()">
                         <span class="user-avatar" id="userAvatar"><i class="fas fa-beer"></i></span>
                         <span id="userNameDisplay">Guest</span>
-                        <span style="margin-left: 5px; opacity: 0.7;"><i class="fas fa-gear"></i></span>
+                        <span style="margin-left: 3px; opacity: 0.8; font-size: 16px;"><i class="fas fa-gear"></i></span>
                     </div>
                 </div>
                 <div class="header-center">
                     <h1><i class="fas fa-beer-mug-empty"></i> Beer Tour</h1>
                     <div class="subtitle">Marco's 30th <i class="fas fa-cake-candles"></i></div>
                 </div>
-                <div class="header-right">
+                <div class="header-right" style="display: flex; gap: 10px; justify-content: flex-end; align-items: center;">
                     <button class="share-btn" onclick="syncWithSheet()" title="Sincronizza con gli altri"><i class="fas fa-sync"></i> Sync</button>
-                    <button class="share-btn" style="background: rgba(255,100,100,0.3); margin-left: 5px;" onclick="logout()"><i class="fas fa-right-from-bracket"></i></button>
+                    <button class="share-btn" style="background: rgba(255,100,100,0.3);" onclick="logout()" title="Esci"><i class="fas fa-right-from-bracket"></i> Esci</button>
                 </div>
             </div>
         </div>
@@ -1929,31 +1888,6 @@
             </div>
         </div>
 
-        <!-- Photos Tab (NEW - Separated from Challenges) -->
-        <div id="photos-tab" class="tab-content">
-            <h3 style="color: #2C2C2C; margin-bottom: 20px; font-size: 20px;">
-                <i class="fas fa-images" style="color: #FDB927; margin-right: 8px;"></i>
-                Galleria Foto del Tour
-            </h3>
-            <div class="photo-grid" id="photoGrid">
-                <!-- Photo slots will be generated -->
-            </div>
-
-            <!-- Hidden inputs for camera and gallery -->
-            <input type="file" id="photoCameraInput" style="display: none;" accept="image/*" capture="environment">
-            <input type="file" id="photoGalleryInput" style="display: none;" accept="image/*" multiple>
-
-            <!-- Two buttons: Camera and Gallery -->
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="upload-btn" style="flex: 1;" onclick="document.getElementById('photoCameraInput').click()">
-                    <i class="fas fa-camera"></i> Scatta Foto
-                </button>
-                <button class="upload-btn" style="flex: 1; background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);" onclick="document.getElementById('photoGalleryInput').click()">
-                    <i class="fas fa-images"></i> Da Galleria
-                </button>
-            </div>
-        </div>
-
         <!-- Scoreboard Tab -->
         <div id="scoreboard-tab" class="tab-content">
             <div style="text-align: center; padding: 40px 20px;">
@@ -2025,7 +1959,6 @@
             weight: 70,
             height: 175,
             gender: 'male',
-            photos: [],
             challenges: [],
             beersPerLocation: [0, 0, 0, 0, 0, 0],
             stopArrivalTimes: []
@@ -2037,22 +1970,95 @@
 
         // Challenges Data with Font Awesome icons
         const challengesData = [
-            { id: 1, icon: "fa-camera", title: "Selfie Master", description: "Fai un selfie di gruppo in ogni tappa", points: 50, completed: false },
-            { id: 2, icon: "fa-beer", title: "Assaggiatore", description: "Prova almeno 5 birre diverse", points: 30, completed: false, autoUnlock: true },
-            { id: 4, icon: "fa-users", title: "Socializzatore", description: "Fai amicizia con qualcuno al bar", points: 20, completed: false },
-            { id: 5, icon: "fa-images", title: "Fotografo", description: "Scatta 9+ foto durante il tour", points: 25, completed: false, autoUnlock: true },
-            { id: 6, icon: "fa-microphone", title: "Karaoke Star", description: "Canta una canzone al festeggiato", points: 35, completed: false },
-            { id: 8, icon: "fa-cake-candles", title: "Birthday Boy", description: "Fai gli auguri a Marco in modo creativo", points: 50, completed: false },
-            { id: 9, icon: "fa-pizza-slice", title: "Gourmet", description: "Prendi mortadella all'Osteria del Sole", points: 20, completed: false },
-            { id: 10, icon: "fa-trophy", title: "Completista", description: "Visita tutte e 6 le birrerie", points: 100, completed: false, autoUnlock: true },
-            { id: 11, icon: "fa-glass-water", title: "Etilista", description: "Raggiungi BAC 2.0‰ dopo la 2° tappa", points: 30, completed: false, autoUnlock: true },
-            { id: 12, icon: "fa-fire", title: "Etilista Pro", description: "Raggiungi BAC 3.5‰ entro la 2° tappa", points: 50, completed: false, autoUnlock: true },
-            { id: 13, icon: "fa-skull-crossbones", title: "Etilista Supremo", description: "Raggiungi BAC 5.0‰ entro la 3° tappa", points: 75, completed: false, autoUnlock: true },
-            { id: 14, icon: "fa-person-walking", title: "Passeggiata Pensionato", description: "Mantieni BAC <1.5‰ nelle prime 4 tappe", points: 40, completed: false, autoUnlock: true },
-            { id: 15, icon: "fa-bed", title: "Pensione Completa", description: "Mantieni BAC <2.0‰ per tutto il tour", points: 60, completed: false, autoUnlock: true },
-            { id: 16, icon: "fa-wine-bottle", title: "Collezionista", description: "Prova almeno 5 varietà diverse di birra", points: 45, completed: false, autoUnlock: true },
-            { id: 17, icon: "fa-champagne-glasses", title: "Un Bicchiere di Troppo", description: "Prendi almeno 2 birre in ogni tappa", points: 55, completed: false, autoUnlock: true },
-            { id: 18, icon: "fa-cake-candles", title: "Too Old to Die Young", description: "Achievement speciale per 'Prosciutto'", points: 100, completed: false, autoUnlock: true }
+            // 1. Too Old to Die Young
+            { id: 1, icon: "fa-cake-candles", title: "Too Old to Die Young", description: "Achievement speciale per 'Prosciutto'", points: 100, completed: false, autoUnlock: true },
+
+            // 2. Rizzi (ex Selfie Master)
+            { id: 2, icon: "fa-camera", title: "Rizzi", description: "Fai un selfie di gruppo in ogni tappa", points: 50, completed: false },
+
+            // 3. Gourmet
+            { id: 3, icon: "fa-pizza-slice", title: "Gourmet", description: "Prendi mortadella all'Osteria del Sole", points: 5, completed: false },
+
+            // 4. Partenza Rinfrescante
+            { id: 4, icon: "fa-snowflake", title: "Partenza Rinfrescante", description: "Birra bionda o weiss come prima birra", points: 5, completed: false, autoUnlock: true },
+
+            // 5. Partenza Ribaltante
+            { id: 5, icon: "fa-bolt", title: "Partenza Ribaltante", description: "Prima birra con gradazione ≥7%", points: 15, completed: false, autoUnlock: true },
+
+            // 6. Una Strada in Salita
+            { id: 6, icon: "fa-chart-line", title: "Una Strada in Salita", description: "Gradazione media aumenta ad ogni tappa", points: 25, completed: false, autoUnlock: true },
+
+            // 7. Montagne Russe
+            { id: 7, icon: "fa-wave-square", title: "Montagne Russe", description: "Gradazione alterna su/giù per 3 tappe", points: 35, completed: false, autoUnlock: true },
+
+            // 8. Etilista
+            { id: 8, icon: "fa-glass-water", title: "Etilista", description: "BAC ≥0.75‰ entro la 2° tappa", points: 15, completed: false, autoUnlock: true },
+
+            // 9. Etilista Pro
+            { id: 9, icon: "fa-fire", title: "Etilista Pro", description: "BAC ≥1.5‰ entro la 3° tappa", points: 50, completed: false, autoUnlock: true },
+
+            // 10. Etilista Supremo
+            { id: 10, icon: "fa-skull-crossbones", title: "Etilista Supremo", description: "BAC ≥2.5‰ entro la 5° tappa", points: 100, completed: false, autoUnlock: true },
+
+            // 11. Collezionista
+            { id: 11, icon: "fa-wine-bottle", title: "Collezionista", description: "Prova almeno 5 varietà diverse di birra", points: 30, completed: false, autoUnlock: true },
+
+            // 12. Un Bicchiere di Troppo
+            { id: 12, icon: "fa-champagne-glasses", title: "Un Bicchiere di Troppo", description: "Almeno 2 birre in ogni tappa", points: 35, completed: false, autoUnlock: true },
+
+            // 13. Specialista
+            { id: 13, icon: "fa-star", title: "Specialista", description: "Prova la specialità di ogni birreria", points: 20, completed: false },
+
+            // 14. Normalone
+            { id: 14, icon: "fa-mug-saucer", title: "Normalone", description: "Bevi solo birre medie bionde", points: 5, completed: false, autoUnlock: true },
+
+            // 15. Passeggiata Pensionante
+            { id: 15, icon: "fa-person-walking", title: "Passeggiata Pensionante", description: "BAC <0.9‰ nelle prime 4 tappe", points: -10, completed: false, autoUnlock: true },
+
+            // 16. Pensione Completa
+            { id: 16, icon: "fa-bed", title: "Pensione Completa", description: "BAC <1.75‰ per tutto il tour", points: -50, completed: false, autoUnlock: true },
+
+            // 17. Esploratore
+            { id: 17, icon: "fa-toilet", title: "Esploratore", description: "Visita i bagni di tutte le birrerie", points: 10, completed: false },
+
+            // 18. Lupin
+            { id: 18, icon: "fa-mask", title: "Lupin", description: "Ruba un bicchiere in una birreria", points: 50, completed: false },
+
+            // 19. Luminare
+            { id: 19, icon: "fa-star-of-david", title: "Luminare", description: "Convinci una ProPal che Israele 'ha fatto bene'", points: 35, completed: false },
+
+            // 20. Supporter
+            { id: 20, icon: "fa-handshake", title: "Supporter", description: "Presenta una Simmenthal a Lillo", points: 35, completed: false },
+
+            // 21. Nostalgico
+            { id: 21, icon: "fa-music", title: "Nostalgico", description: "Canta 'Faccetta Nera' o 'Giovinezza'", points: 35, completed: false },
+
+            // 22. Casa Pound
+            { id: 22, icon: "fa-hand", title: "Casa Pound", description: "Fai il saluto romano", points: 15, completed: false },
+
+            // 23. Baffino
+            { id: 23, icon: "fa-book", title: "Baffino", description: "Leggi Mein Kampf su uno sgabello", points: 180, completed: false },
+
+            // 24. Scroccone
+            { id: 24, icon: "fa-cookie-bite", title: "Scroccone", description: "Chiedi un drummino ad una comunistaccia", points: 10, completed: false },
+
+            // 25. Scroccone Incallito
+            { id: 25, icon: "fa-cookie", title: "Scroccone Incallito", description: "Chiedi 3 drummini a tre comunistacce", points: 20, completed: false },
+
+            // 26. Scroccone Spudorato
+            { id: 26, icon: "fa-crown", title: "Scroccone Spudorato", description: "Chiedi 5 drummini alla stessa comunistaccia", points: 30, completed: false },
+
+            // 27. Insaziabile
+            { id: 27, icon: "fa-smoking", title: "Insaziabile", description: "Fuma iQos mentre fumi Paglione", points: 15, completed: false },
+
+            // 28. Molestatore
+            { id: 28, icon: "fa-heart", title: "Molestatore", description: "Provaci con una cameriera", points: 25, completed: false },
+
+            // 29. Molestatore Seriale
+            { id: 29, icon: "fa-heart-broken", title: "Molestatore Seriale", description: "Provaci con ogni cameriera", points: 50, completed: false },
+
+            // 30. Leso
+            { id: 30, icon: "fa-face-dizzy", title: "Leso", description: "Fai almeno una volta il leso", points: -50, completed: false }
         ];
 
         // Locations Data with coordinates
@@ -2166,28 +2172,34 @@
             const weight = parseInt(document.getElementById('userWeight').value) || 70;
             const height = parseInt(document.getElementById('userHeight').value) || 175;
             const gender = document.getElementById('userGender').value || 'male';
-            
+            const departureTime = document.getElementById('departureTime').value || '16:00';
+
             appState.user.name = name;
             appState.user.id = generateUserId();
             appState.weight = weight;
             appState.height = height;
             appState.gender = gender;
-            
+            appState.departureTime = departureTime; // Save departure time
+
+            // Calculate stop times based on departure
+            calculateStopTimes(departureTime);
+
             // Save to localStorage
             try {
                 localStorage.setItem('beerTourUser', JSON.stringify(appState.user));
                 localStorage.setItem('beerTourProfile', JSON.stringify({
                     weight: weight,
                     height: height,
-                    gender: gender
+                    gender: gender,
+                    departureTime: departureTime
                 }));
             } catch(e) {
                 console.log('localStorage not available');
             }
-            
+
             // Hide welcome screen
             document.getElementById('welcomeScreen').classList.add('hidden');
-            
+
             // Update UI
             document.getElementById('userNameDisplay').textContent = name;
             document.getElementById('userAvatar').innerHTML = appState.user.avatar;
@@ -2196,7 +2208,6 @@
             initializeStops();
             updateSelectedStop(0);
             loadChallenges();
-            initPhotoGallery();
 
             // Check challenges immediately (e.g., "Too Old to Die Young" for Prosciutto)
             checkChallenges();
@@ -2214,6 +2225,41 @@
 
         function generateUserId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Calculate stop times dynamically based on departure time
+        function calculateStopTimes(departureTime) {
+            const [hours, minutes] = departureTime.split(':').map(Number);
+            let currentTime = hours * 60 + minutes; // Convert to minutes from midnight
+
+            // Duration at each stop in minutes: 30min each
+            const stopDurations = [30, 30, 30, 30, 30, 30]; // 6 stops
+            const travelTime = 10; // Travel time between stops in minutes
+
+            locations.forEach((loc, index) => {
+                const startTime = currentTime;
+                const endTime = currentTime + stopDurations[index];
+
+                // Format times as HH:MM
+                const formatTime = (mins) => {
+                    const h = Math.floor(mins / 60);
+                    const m = mins % 60;
+                    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+                };
+
+                loc.time = `${formatTime(startTime)}-${formatTime(endTime)}`;
+
+                // Move to next stop (add stop duration + travel time)
+                currentTime = endTime + travelTime;
+            });
+
+            // Update tour time display
+            const firstTime = locations[0].time.split('-')[0];
+            const lastTime = locations[locations.length - 1].time.split('-')[1];
+            const tourTimeElement = document.getElementById('tourTime');
+            if (tourTimeElement) {
+                tourTimeElement.textContent = `${firstTime} - ${lastTime}`;
+            }
         }
 
         // Initialize Stops Timeline
@@ -2245,7 +2291,19 @@
             updateStopsProgress();
             updateSelectedStop(index);
             document.getElementById('currentStop').textContent = `${index + 1}/6`;
-            showNotification(`📍 Tappa: ${locations[index].name}`);
+
+            // Special celebration for last stop!
+            if (index === locations.length - 1) {
+                showNotification(`🎉🍺 ULTIMA TAPPA! ${locations[index].name} 🍺🎉`);
+
+                // Add confetti animation
+                setTimeout(() => {
+                    showNotification(`🏁 Tour Completato! Congratulazioni! 🥳`);
+                }, 2000);
+            } else {
+                showNotification(`📍 Tappa: ${locations[index].name}`);
+            }
+
             checkChallenges(); // Check if any challenges are unlocked with new location
             saveState();
         }
@@ -2840,9 +2898,10 @@
 
             if (challenge.completed) {
                 appState.points += challenge.points;
-                showNotification(`🏆 Achievement Sbloccato! +${challenge.points} punti`);
+                const sign = challenge.points >= 0 ? '+' : '';
+                showNotification(`🏆 Achievement Sbloccato! ${sign}${challenge.points} punti`);
             } else {
-                appState.points = Math.max(0, appState.points - challenge.points);
+                appState.points -= challenge.points;
             }
 
             loadChallenges();
@@ -2854,105 +2913,167 @@
             let unlocked = false;
             const bac = calculateBAC();
 
-            // AUTO: Assaggiatore - 5+ beers (id: 2, index 1)
-            if (appState.beers.length >= 5 && !challengesData[1].completed) {
-                challengesData[1].completed = true;
-                challengesData[1].isNew = true;
-                appState.points += challengesData[1].points;
-                showNotification(`🏆 "${challengesData[1].title}" Sbloccato! +${challengesData[1].points} punti`);
-                unlocked = true;
+            // Helper function to unlock challenge
+            function unlockChallenge(index, emoji = '🏆') {
+                const ch = challengesData[index];
+                if (!ch.completed) {
+                    ch.completed = true;
+                    ch.isNew = true;
+                    appState.points += ch.points;
+                    const sign = ch.points >= 0 ? '+' : '';
+                    showNotification(`${emoji} "${ch.title}" Sbloccato! ${sign}${ch.points} punti`);
+                    unlocked = true;
+                }
             }
 
-            // AUTO: Completista - All 6 locations (id: 10, index 7)
-            if (appState.currentLocation === 5 && !challengesData[7].completed) {
-                challengesData[7].completed = true;
-                challengesData[7].isNew = true;
-                appState.points += challengesData[7].points;
-                showNotification(`🏆 "${challengesData[7].title}" Sbloccato! +${challengesData[7].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Etilista (id: 11, index 8)
-            if (bac >= 2.0 && appState.currentLocation >= 1 && !challengesData[8].completed) {
-                challengesData[8].completed = true;
-                challengesData[8].isNew = true;
-                appState.points += challengesData[8].points;
-                showNotification(`💛 "${challengesData[8].title}" Sbloccato! +${challengesData[8].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Etilista Pro (id: 12, index 9)
-            if (bac >= 3.5 && appState.currentLocation <= 1 && !challengesData[9].completed) {
-                challengesData[9].completed = true;
-                challengesData[9].isNew = true;
-                appState.points += challengesData[9].points;
-                showNotification(`🔥 "${challengesData[9].title}" Sbloccato! +${challengesData[9].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Etilista Supremo (id: 13, index 10)
-            if (bac >= 5.0 && appState.currentLocation <= 2 && !challengesData[10].completed) {
-                challengesData[10].completed = true;
-                challengesData[10].isNew = true;
-                appState.points += challengesData[10].points;
-                showNotification(`💀 "${challengesData[10].title}" Sbloccato! +${challengesData[10].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Passeggiata Pensionato (id: 14, index 11)
-            if (bac < 1.5 && appState.currentLocation >= 3 && !challengesData[11].completed) {
-                challengesData[11].completed = true;
-                challengesData[11].isNew = true;
-                appState.points += challengesData[11].points;
-                showNotification(`🚶 "${challengesData[11].title}" Sbloccato! +${challengesData[11].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Pensione Completa (id: 15, index 12)
-            if (bac < 2.0 && appState.currentLocation === 5 && !challengesData[12].completed) {
-                challengesData[12].completed = true;
-                challengesData[12].isNew = true;
-                appState.points += challengesData[12].points;
-                showNotification(`🛏️ "${challengesData[12].title}" Sbloccato! +${challengesData[12].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Collezionista (id: 16, index 13) - 5+ varietà diverse
-            const uniqueTypes = [...new Set(appState.beers.map(b => b.type))];
-            if (uniqueTypes.length >= 5 && !challengesData[13].completed) {
-                challengesData[13].completed = true;
-                challengesData[13].isNew = true;
-                appState.points += challengesData[13].points;
-                showNotification(`🍷 "${challengesData[13].title}" Sbloccato! ${uniqueTypes.length} varietà! +${challengesData[13].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Un Bicchiere di Troppo (id: 17, index 14) - 2+ birre per tappa
-            if (appState.currentLocation === 5 &&
-                appState.beersPerLocation.every(count => count >= 2) &&
-                !challengesData[14].completed) {
-                challengesData[14].completed = true;
-                challengesData[14].isNew = true;
-                appState.points += challengesData[14].points;
-                showNotification(`🍻 "${challengesData[14].title}" Sbloccato! +${challengesData[14].points} punti`);
-                unlocked = true;
-            }
-
-            // AUTO: Too Old to Die Young (id: 18, index 15) - Solo per "Prosciutto"
+            // 1. Too Old to Die Young (index 0) - Solo per "Prosciutto"
             if (appState.user && appState.user.name &&
-                appState.user.name.toLowerCase().trim() === 'prosciutto' &&
-                !challengesData[15].completed) {
-                challengesData[15].completed = true;
-                challengesData[15].isNew = true;
-                appState.points += challengesData[15].points;
-                showNotification(`🎂 "${challengesData[15].title}" Sbloccato! Happy Birthday Prosciutto! +${challengesData[15].points} punti`);
-                unlocked = true;
+                appState.user.name.toLowerCase().trim() === 'prosciutto') {
+                unlockChallenge(0, '🎂');
+            }
+
+            // 4. Partenza Rinfrescante (index 3) - Prima birra bionda o weiss
+            if (appState.beers.length >= 1 && !challengesData[3].completed) {
+                const firstBeer = appState.beers[0];
+                if (firstBeer.type === 'bionda' || firstBeer.type === 'weiss') {
+                    unlockChallenge(3, '❄️');
+                }
+            }
+
+            // 5. Partenza Ribaltante (index 4) - Prima birra >=7%
+            if (appState.beers.length >= 1 && !challengesData[4].completed) {
+                const firstBeer = appState.beers[0];
+                if (firstBeer.alcohol >= 7) {
+                    unlockChallenge(4, '⚡');
+                }
+            }
+
+            // 6. Una Strada in Salita (index 5) - Gradazione media aumenta ogni tappa
+            if (appState.currentLocation === 5 && !challengesData[5].completed) {
+                // Calcola gradazione media per ogni tappa
+                const avgPerLocation = [];
+                for (let i = 0; i < 6; i++) {
+                    const beersAtLocation = appState.beers.filter((b, idx) => {
+                        return appState.beersPerLocation.slice(0, i).reduce((a, c) => a + c, 0) <= idx &&
+                               idx < appState.beersPerLocation.slice(0, i + 1).reduce((a, c) => a + c, 0);
+                    });
+                    if (beersAtLocation.length > 0) {
+                        const avg = beersAtLocation.reduce((sum, b) => sum + b.alcohol, 0) / beersAtLocation.length;
+                        avgPerLocation.push(avg);
+                    }
+                }
+
+                // Verifica: prima e ultima tappa strettamente maggiore, altre >=
+                let valid = true;
+                for (let i = 1; i < avgPerLocation.length; i++) {
+                    if (i === 1 || i === avgPerLocation.length - 1) {
+                        // Prima e ultima: strettamente maggiore
+                        if (avgPerLocation[i] <= avgPerLocation[i - 1]) {
+                            valid = false;
+                            break;
+                        }
+                    } else {
+                        // Altre: maggiore o uguale
+                        if (avgPerLocation[i] < avgPerLocation[i - 1]) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (valid && avgPerLocation.length === 6) {
+                    unlockChallenge(5, '📈');
+                }
+            }
+
+            // 7. Montagne Russe (index 6) - Alterna su/giù per 3 transizioni (anche non consecutive)
+            if (appState.currentLocation >= 3 && !challengesData[6].completed) {
+                const avgPerLocation = [];
+                for (let i = 0; i <= appState.currentLocation; i++) {
+                    const beersAtLocation = appState.beers.filter((b, idx) => {
+                        return appState.beersPerLocation.slice(0, i).reduce((a, c) => a + c, 0) <= idx &&
+                               idx < appState.beersPerLocation.slice(0, i + 1).reduce((a, c) => a + c, 0);
+                    });
+                    if (beersAtLocation.length > 0) {
+                        const avg = beersAtLocation.reduce((sum, b) => sum + b.alcohol, 0) / beersAtLocation.length;
+                        avgPerLocation.push(avg);
+                    }
+                }
+
+                // Trova transizioni (su/giù)
+                const transitions = [];
+                for (let i = 1; i < avgPerLocation.length; i++) {
+                    if (avgPerLocation[i] > avgPerLocation[i - 1]) {
+                        transitions.push('up');
+                    } else if (avgPerLocation[i] < avgPerLocation[i - 1]) {
+                        transitions.push('down');
+                    }
+                }
+
+                // Conta alternanze (anche non consecutive)
+                let alternations = 0;
+                for (let i = 1; i < transitions.length; i++) {
+                    if (transitions[i] !== transitions[i - 1]) {
+                        alternations++;
+                    }
+                }
+
+                if (alternations >= 3) {
+                    unlockChallenge(6, '🎢');
+                }
+            }
+
+            // 8. Etilista (index 7) - BAC >=0.75‰ entro 2° tappa
+            if (bac >= 0.75 && appState.currentLocation <= 1) {
+                unlockChallenge(7, '🍺');
+            }
+
+            // 9. Etilista Pro (index 8) - BAC >=1.5‰ entro 3° tappa
+            if (bac >= 1.5 && appState.currentLocation <= 2) {
+                unlockChallenge(8, '🔥');
+            }
+
+            // 10. Etilista Supremo (index 9) - BAC >=2.5‰ entro 5° tappa
+            if (bac >= 2.5 && appState.currentLocation <= 4) {
+                unlockChallenge(9, '💀');
+            }
+
+            // 11. Collezionista (index 10) - 5+ varietà diverse
+            const uniqueTypes = [...new Set(appState.beers.map(b => b.type))];
+            if (uniqueTypes.length >= 5) {
+                unlockChallenge(10, '🍷');
+            }
+
+            // 12. Un Bicchiere di Troppo (index 11) - 2+ birre per tappa
+            if (appState.currentLocation === 5 &&
+                appState.beersPerLocation.every(count => count >= 2)) {
+                unlockChallenge(11, '🍻');
+            }
+
+            // 14. Normalone (index 13) - Solo birre medie bionde
+            if (appState.beers.length > 0 && !challengesData[13].completed) {
+                const allNormalone = appState.beers.every(b =>
+                    b.size === 'media' && b.type === 'bionda'
+                );
+                if (allNormalone) {
+                    unlockChallenge(13, '☕');
+                }
+            }
+
+            // 15. Passeggiata Pensionante (index 14) - BAC <0.9‰ nelle prime 4 tappe
+            if (appState.currentLocation >= 3 && bac < 0.9) {
+                unlockChallenge(14, '🚶');
+            }
+
+            // 16. Pensione Completa (index 15) - BAC <1.75‰ per tutto il tour
+            if (appState.currentLocation === 5 && bac < 1.75) {
+                unlockChallenge(15, '🛏️');
             }
 
             if (unlocked) {
                 loadChallenges();
                 updateRecordPoints();
-                updateChallengesBadge(); // Update notification badge
+                updateChallengesBadge();
                 saveState();
             }
         }
@@ -3019,79 +3140,37 @@
             }
         }
 
-        // Photo Gallery System
-        function initPhotoGallery() {
-            const grid = document.getElementById('photoGrid');
-            if (!grid) return;
-
-            grid.innerHTML = '';
-
-            // Create 9 photo slots
-            for (let i = 0; i < 9; i++) {
-                const slot = document.createElement('div');
-                slot.className = 'photo-slot';
-                slot.id = `photo-slot-${i}`;
-
-                if (appState.photos[i]) {
-                    slot.innerHTML = `<img src="${appState.photos[i]}" alt="Photo ${i + 1}">`;
-                } else {
-                    slot.innerHTML = '<div class="add-photo"><i class="fas fa-camera"></i></div>';
-                }
-
-                slot.onclick = () => {
-                    if (!appState.photos[i]) {
-                        document.getElementById('photoCameraInput').click();
-                        window.currentPhotoSlot = i;
-                    }
-                };
-
-                grid.appendChild(slot);
-            }
-
-            // Setup photo input handlers for both camera and gallery
-            const photoCameraInput = document.getElementById('photoCameraInput');
-            const photoGalleryInput = document.getElementById('photoGalleryInput');
-
-            if (photoCameraInput && !photoCameraInput.hasEventListener) {
-                photoCameraInput.addEventListener('change', handlePhotoUpload);
-                photoCameraInput.hasEventListener = true;
-            }
-
-            if (photoGalleryInput && !photoGalleryInput.hasEventListener) {
-                photoGalleryInput.addEventListener('change', handlePhotoUpload);
-                photoGalleryInput.hasEventListener = true;
-            }
-        }
-
-        function handlePhotoUpload(event) {
-            const files = event.target.files;
-            if (!files || files.length === 0) return;
-
-            Array.from(files).forEach((file, index) => {
-                if (appState.photos.length < 9) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        const slotIndex = appState.photos.length;
-                        appState.photos.push(e.target.result);
-                        initPhotoGallery();
-                        checkChallenges();
-                        saveState();
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    showNotification('📸 Limite massimo di 9 foto raggiunto!');
-                }
-            });
-
-            // Reset input
-            event.target.value = '';
-        }
-
-        // Notifications
+        // Notifications with Queue System
         let notificationTimeout;
+        let notificationQueue = [];
+        let isShowingNotification = false;
+
         function showNotification(message) {
+            // Add to queue
+            notificationQueue.push(message);
+
+            // If not currently showing, start processing queue
+            if (!isShowingNotification) {
+                processNotificationQueue();
+            }
+        }
+
+        function processNotificationQueue() {
+            if (notificationQueue.length === 0) {
+                isShowingNotification = false;
+                return;
+            }
+
+            isShowingNotification = true;
             const notification = document.getElementById('notification');
-            if (!notification) return;
+            if (!notification) {
+                notificationQueue = [];
+                isShowingNotification = false;
+                return;
+            }
+
+            // Get next message from queue
+            const message = notificationQueue.shift();
 
             if (notificationTimeout) {
                 clearTimeout(notificationTimeout);
@@ -3100,8 +3179,14 @@
             notification.textContent = message;
             notification.classList.add('show');
 
+            // Show for 3 seconds, then process next
             notificationTimeout = setTimeout(() => {
                 notification.classList.remove('show');
+
+                // Wait 500ms before showing next notification
+                setTimeout(() => {
+                    processNotificationQueue();
+                }, 500);
             }, 3000);
         }
 
@@ -3163,16 +3248,14 @@
                     updateStopsProgress();
                     updateSelectedStop(appState.currentLocation || 0);
                     loadChallenges();
-                    initPhotoGallery();
                 }
             } catch(e) {
                 console.log('Could not load saved state');
             }
 
-            // Always initialize challenges and photos (even for new users)
+            // Always initialize challenges (even for new users)
             if (!document.getElementById('challengesList').hasChildNodes()) {
                 loadChallenges();
-                initPhotoGallery();
             }
         };
 
@@ -3184,7 +3267,6 @@
         // Dopo aver deployato lo script, incolla l'URL qui:
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw93CHhCGB2PCtW4RVE6czi3lzr9fO0csM8UfJc_wJQwZAFI3k895Ci-_ABkEjGtvbQaA/exec";
 
-        let sharedPhotos = []; // Foto condivise da tutti gli utenti
         let leaderboardData = []; // Dati classifica
 
         // Sync manuale (bottone Sync)
@@ -3272,8 +3354,8 @@
             if (!scoreboardTab) return;
 
             let html = `
-                <div style="padding: 20px;">
-                    <h2 style="text-align: center; color: #2C2C2C; margin-bottom: 20px;">
+                <div style="padding: 20px; padding-top: 10px;">
+                    <h2 style="text-align: center; color: #2C2C2C; margin-bottom: 20px; margin-top: 5px;">
                         <i class="fas fa-trophy" style="color: #FDB927;"></i> Classifica Live
                     </h2>
             `;
@@ -3418,7 +3500,6 @@
                         }
                     } else {
                         // Fallback to local gallery only
-                        initPhotoGallery();
                         checkChallenges();
                     }
 
